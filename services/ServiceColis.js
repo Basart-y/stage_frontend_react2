@@ -21,6 +21,20 @@ export const serviceColis = {
         parcel.comment = data.comment || "";
 
         return parcel;
+    },
+
+    async returnParcel(id, data) {
+        const parcel = parcelsMock.find((parcel) => parcel.id == id);
+
+        if (!parcel) {
+            return null;
+        }
+
+        parcel.status = "RETOUR";
+        parcel.returned = true;
+        parcel.returnReason = data.reason || "";
+
+        return parcel;
     }
 };
 

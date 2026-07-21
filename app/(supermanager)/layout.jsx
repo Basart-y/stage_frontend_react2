@@ -1,4 +1,4 @@
-// app/(supermanager)/supermanager/MiseEnPage.jsx
+// app/(supermanager)/supermanager/layout.jsx
 import DashboardShell from "@/composants/layout/DashboardShell";
 import Link from "next/link";
 

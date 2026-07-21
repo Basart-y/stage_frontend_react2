@@ -1,4 +1,4 @@
-// app/(commercant)/commercant/MiseEnPage.jsx
+// app/(commercant)/commercant/layout.jsx
 import DashboardShell from "@/composants/layout/DashboardShell";
 import Link from "next/link";
 

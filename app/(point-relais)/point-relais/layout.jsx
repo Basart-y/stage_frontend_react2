@@ -1,4 +1,4 @@
-// app/(point-relais)/point-relais/MiseEnPage.jsx
+// app/(point-relais)/point-relais/layout.jsx
 import DashboardShell from "@/composants/layout/DashboardShell";
 import Link from "next/link";
 
