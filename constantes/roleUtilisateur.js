@@ -1,0 +1,16 @@
+export const USER_ROLE = {
+
+
+    COMMERCANT: "COMMERCANT",
+
+
+    RELAY_MANAGER: "RELAY_MANAGER",
+
+
+    MANAGER: "MANAGER",
+
+
+    SUPER_MANAGER: "SUPER_MANAGER"
+
+
+};

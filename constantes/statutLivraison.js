@@ -1,0 +1,27 @@
+export const DELIVERY_STATUS = {
+
+
+    CREATED: "CREATED",
+
+
+    PLANNED: "PLANNED",
+
+
+    IN_TRANSIT: "IN_TRANSIT",
+
+
+    RECEIVED: "RECEIVED",
+
+
+    AVAILABLE: "AVAILABLE",
+
+
+    DELIVERED: "DELIVERED",
+
+
+    RETURNED: "RETURNED",
+
+
+    INCIDENT: "INCIDENT"
+
+};
