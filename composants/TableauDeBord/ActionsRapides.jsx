@@ -3,11 +3,7 @@ import Link from "next/link";
 export default function ActionsRapides({actions}) {
 
     return (
-        <div className="
-            grid
-            md:grid-cols-3
-            gap-4
-        ">
+        <div className="grid md:grid-cols-3gap-4">
             {
                 actions.map(action => (
                     <Link

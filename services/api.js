@@ -7,8 +7,6 @@ export async function apiRequest(url, options = {}) {
 
 
     const timeout = setTimeout(() => controller.abort(), API_TIMEOUT);
-
-
     try {
 
 

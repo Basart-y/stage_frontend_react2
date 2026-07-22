@@ -28,68 +28,62 @@ export default function CommercantProfilPage() {
     }
 
     return (<div className="space-y-8">
-            <PageTitle
-                title="Profil commerçant"
-                description="Paramètres de votre compte et informations personnelles."
-            />
+        <PageTitle
+            title="Profil commerçant"
+            description="Paramètres de votre compte et informations personnelles."
+        />
 
-            <form onSubmit={handleSave} className="space-y-8">
-                <Section title="Informations personnelles">
-                    <div className="grid gap-6 md:grid-cols-2">
-                        <Input
-                            label="Prénom"
-                            value={form.firstname}
-                            onChange={(e) => handleChange("firstname", e.target.value)}
-                        />
-                        <Input
-                            label="Nom"
-                            value={form.lastname}
-                            onChange={(e) => handleChange("lastname", e.target.value)}
-                        />
-                        <Input
-                            label="Email"
-                            type="email"
-                            value={form.email}
-                            onChange={(e) => handleChange("email", e.target.value)}
-                        />
-                        <Input
-                            label="Téléphone"
-                            value={form.phone}
-                            onChange={(e) => handleChange("phone", e.target.value)}
-                        />
-                    </div>
-                </Section>
-
-                <Section title="Commerce associé">
-                    <div className="grid gap-6 md:grid-cols-2">
-                        <Input
-                            label="Nom du commerce"
-                            value={form.commerceName}
-                            onChange={(e) => handleChange("commerceName", e.target.value)}
-                        />
-                        <Input
-                            label="Type de commerce"
-                            value={form.commerceType}
-                            onChange={(e) => handleChange("commerceType", e.target.value)}
-                        />
-                    </div>
-
-                    <Textarea
-                        label="Description du commerce"
-                        placeholder="Présentez rapidement votre activité..."
-                        value={form.description}
-                        onChange={(e) => handleChange("description", e.target.value)}
+        <form onSubmit={handleSave} className="space-y-8">
+            <Section title="Informations personnelles">
+                <div className="grid gap-6 md:grid-cols-2">
+                    <Input
+                        label="Prénom"
+                        value={form.firstname}
+                        onChange={(e) => handleChange("firstname", e.target.value)}
                     />
-                </Section>
-
-                <div className="flex justify-end">
-                    <button
-                        type="submit"
-                        className="rounded-lg bg-blue-600 px-6 py-3 font-medium"
-                    >
-                        Enregistrer
-                    </button>
+                    <Input
+                        label="Nom"
+                        value={form.lastname}
+                        onChange={(e) => handleChange("lastname", e.target.value)}
+                    />
+                    <Input
+                        label="Email"
+                        type="email"
+                        value={form.email}
+                        onChange={(e) => handleChange("email", e.target.value)}
+                    />
+                    <Input
+                        label="Téléphone"
+                        value={form.phone}
+                        onChange={(e) => handleChange("phone", e.target.value)}
+                    />
                 </div>
-            </form>
-        </div>);
+            </Section>
+            <Section title="Commerce associé">
+                <div className="grid gap-6 md:grid-cols-2">
+                    <Input
+                        label="Nom du commerce"
+                        value={form.commerceName}
+                        onChange={(e) => handleChange("commerceName", e.target.value)}
+                    />
+                    <Input
+                        label="Type de commerce"
+                        value={form.commerceType}
+                        onChange={(e) => handleChange("commerceType", e.target.value)}
+                    />
+                </div>
+                <Textarea
+                    label="Description du commerce"
+                    placeholder="Présentez rapidement votre activité..."
+                    value={form.description}
+                    onChange={(e) => handleChange("description", e.target.value)}
+                />
+            </Section>
+            <div className="flex justify-end">
+                <button type="submit" className="rounded-lg bg-blue-600 px-6 py-3 font-medium">
+                    Enregistrer
+                </button>
+            </div>
+        </form>
+    </div>);
 }

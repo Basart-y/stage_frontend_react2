@@ -24,70 +24,33 @@ const stats = [
 ];
 
 
-const actions = [
+const actions = [{
+    label: "Créer manager",
 
+    href: "/supermanager/managers/create",
 
-    {
-        label: "Créer manager",
+    description: "Ajouter un responsable"
+}, {
+    label: "Gestion managers",
 
-        href: "/supermanager/managers/create",
+    href: "/supermanager/managers",
 
-        description: "Ajouter un responsable"
-    },
+    description: "Administrer les comptes"
+}, {
+    label: "Statistiques",
 
+    href: "/supermanager/statistiques",
 
-    {
-        label: "Gestion managers",
-
-        href: "/supermanager/managers",
-
-        description: "Administrer les comptes"
-    },
-
-
-    {
-        label: "Statistiques",
-
-        href: "/supermanager/statistiques",
-
-        description: "Voir les indicateurs"
-    }
-
-
-];
+    description: "Voir les indicateurs"
+}];
 
 
 export default function SuperManagerDashboardPage() {
 
-
-    return (
-
-        <section className="space-y-8">
-
-
-            <PageTitle
-
-                title="Espace SuperManager"
-
-                description="Administration globale de la plateforme."
-
-            />
-
-
-            <GrillesStatistiques
-
-                stats={stats}
-
-            />
-
-
-            <ActionsRapides
-
-                actions={actions}
-
-            />
-
-
+    return (<section className="space-y-8">
+            <PageTitle title="Espace SuperManager" description="Administration globale de la plateforme."/>
+            <GrillesStatistiques stats={stats}/>
+            <ActionsRapides actions={actions}/>
         </section>
 
     );

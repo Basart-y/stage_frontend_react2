@@ -17,63 +17,33 @@ const statusLabel = {
 export default function SuiviColisPage() {
 
     const [parcels, setParcels] = useState([]);
-
     const router = useRouter();
 
-
     useEffect(() => {
-
         serviceColis
             .findAll()
             .then(setParcels);
-
     }, []);
 
-
-    return (
-
-        <div className="space-y-8">
-
-            <PageTitle
-                title="Suivi colis"
-                description="Suivi des colis reçus dans votre point relais."
-            />
-
+    return (<div className="space-y-8">
+            <PageTitle title="Suivi colis" description="Suivi des colis reçus dans votre point relais."/>
 
             <TableauDonnees
-                columns={[
+                columns={[{
+                    key: "reference", label: "Référence"
+                }, {
+                    key: "customer", label: "Client"
+                }, {
+                    key: "status", label: "Statut", render: (row) => statusLabel[row.status] || row.status
+                }, {
+                    key: "actions", label: "Actions", render: (row) => (
 
-                    {
-                        key: "reference", label: "Référence"
-                    },
-
-                    {
-                        key: "customer", label: "Client"
-                    },
-
-                    {
-                        key: "status", label: "Statut", render: (row) => statusLabel[row.status] || row.status
-                    },
-
-                    {
-                        key: "actions", label: "Actions", render: (row) => (
-
-                            <button
-                                className="
-                                    text-blue-400
-                                    underline
-                                "
-                                onClick={() => router.push(`../point-relais/suivi/${row.reference}`)}
-                            >
-                                Voir détail
-                            </button>)
-                    }]}
+                        <button className="text-blue-400 underline"
+                                onClick={() => router.push(`../point-relais/suivi/${row.reference}`)}>
+                            Voir détail
+                        </button>)
+                }]}
                 data={parcels}
-
             />
-
-        </div>
-
-    );
-
+        </div>);
 }

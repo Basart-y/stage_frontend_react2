@@ -1,27 +1,10 @@
 export default function LoginPage() {
 
-    return (
-
-        <main
-            className="
-                min-h-screen
-                flex
-                items-center
-                justify-center
-            "
-        >
-
-            <div
-                className="
-                    w-full
-                    max-w-sm
-                    space-y-4
-                "
-            >
+    return (<main className="min-h-screen flex items-center justify-center">
+            <div className="w-full max-w-sm space-y-4">
                 <h1 className="text-2xl font-semibold">
                     Connexion
                 </h1>
-
 
                 <p className="text-sm text-slate-400">
                     Choisissez un rôle pour accéder à l'espace correspondant.
@@ -58,27 +41,11 @@ export default function LoginPage() {
     );
 
 }
+
 function RoleLink({href, label}) {
 
     return (
-
-        <a
-            href={href}
-            className="
-                block
-                w-full
-                text-left
-                px-3
-                py-2
-                rounded-md
-                bg-slate-800
-                hover:bg-slate-700
-                text-sm
-            "
-        >
+        <a href={href} className="block w-full text-left px-3 py-2 rounded-md bg-slate-800 hover:bg-slate-700text-sm">
             {label}
-        </a>
-
-    );
-
+        </a>);
 }

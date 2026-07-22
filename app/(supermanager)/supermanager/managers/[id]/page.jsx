@@ -11,59 +11,25 @@ import {serviceSuperManager} from "@/services/ServiceSuperManager.js";
 
 export default function ManagerDetailPage() {
 
-
     const params = useParams();
-
     const router = useRouter();
-
-
     const [manager, setManager] = useState(null);
-
-
     useEffect(() => {
-
-
         if (!params.id) {
             return;
         }
-
-
         serviceSuperManager
             .getManagerById(params.id)
             .then(setManager);
-
-
     }, [params.id]);
-
-
-    if (!manager) {
-
-
-        return (
-
-            <div className="text-slate-400">
-
-                Chargement du manager...
-
-            </div>
-
-        );
-
-    }
 
 
     function changeStatus(status) {
 
-
         // Plus tard :
         // serviceSuperManager.updateStatus(manager.id,status)
-
-
         console.log("Nouveau statut", status);
-
-
         alert(`Statut modifié : ${status}`);
-
     }
 
 
@@ -71,55 +37,30 @@ export default function ManagerDetailPage() {
 
 
         const confirmed = window.confirm("Supprimer définitivement ce manager ?");
-
-
         if (!confirmed) {
             return;
         }
-
-
         // Plus tard :
         // serviceSuperManager.deleteManager(manager.id)
-
-
-        alert("Suppression simulée");
-
-
         router.push("/supermanager/managers");
 
     }
 
 
-    return (
-
-        <div className="space-y-8">
-
-
-            <PageTitle
-                title="Détail du manager"
-                description="Informations et administration du compte."
-            />
+    return (<div className="space-y-8">
+            <PageTitle title="Détail du manager" description="Informations et administration du compte."/>
             <Section title="Informations du compte">
 
-
                 <div className="grid gap-6 md:grid-cols-2">
-
-
                     <div>
-
                         <p className="text-sm text-slate-400">
                             Prénom
                         </p>
-
                         <p className="font-medium">
                             {manager.firstname}
                         </p>
-
                     </div>
-
-
                     <div>
-
                         <p className="text-sm text-slate-400">
                             Nom
                         </p>
@@ -127,53 +68,34 @@ export default function ManagerDetailPage() {
                         <p className="font-medium">
                             {manager.lastname}
                         </p>
-
                     </div>
 
-
                     <div>
-
                         <p className="text-sm text-slate-400">
                             Email
                         </p>
-
                         <p className="font-medium">
                             {manager.email}
                         </p>
 
                     </div>
 
-
                     <div>
-
                         <p className="text-sm text-slate-400">
                             Statut
                         </p>
-
                         <span
-                            className={`
-                                inline-block
-                                rounded-full
-                                px-3
-                                py-1
-                                text-xs
-                                ${manager.status === "ACTIVE" ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}
-                            `}
-                        >
-
+                            className={`inline-block rounded-full px-3 py-1 text-xs ${manager.status === "ACTIVE" ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>
                             {manager.status}
-
                         </span>
 
                     </div>
 
 
                     <div>
-
                         <p className="text-sm text-slate-400">
                             Région
                         </p>
-
                         <p className="font-medium">
                             {manager.region ?? "Non renseignée"}
                         </p>
@@ -188,85 +110,32 @@ export default function ManagerDetailPage() {
 
 
             <Section title="Actions administrateur">
-
-
                 <div className="flex flex-wrap gap-4">
-
-
-                    <button
-                        className="
-                            rounded-lg
-                            bg-green-600
-                            px-5
-                            py-2
-                            hover:bg-green-500
-                        "
-                        onClick={() => changeStatus("ACTIVE")}
+                    <button className="rounded-lg bg-green-600 px-5 py-2 hover:bg-green-500"
+                            onClick={() => changeStatus("ACTIVE")}
                     >
-
                         Activer
-
                     </button>
 
-
-                    <button
-                        className="
-                            rounded-lg
-                            bg-yellow-600
-                            px-5
-                            py-2
-                            hover:bg-yellow-500
-                        "
-                        onClick={() => changeStatus("INACTIVE")}
+                    <button className="rounded-lg bg-yellow-600 px-5 py-2 hover:bg-yellow-500"
+                            onClick={() => changeStatus("INACTIVE")}
                     >
-
                         Désactiver
-
                     </button>
 
-
                     <button
-                        className="
-                            rounded-lg
-                            bg-blue-600
-                            px-5
-                            py-2
-                            hover:bg-blue-500
-                        "
+                        className="rounded-lg bg-blue-600 px-5 py-2hover:bg-blue-500"
                         onClick={() => alert("Modification manager (mock)")}
                     >
-
                         Modifier
-
                     </button>
-
 
                     <button
-                        className="
-                            rounded-lg
-                            bg-red-600
-                            px-5
-                            py-2
-                            hover:bg-red-500
-                        "
-                        onClick={deleteManager}
-                    >
-
+                        className="rounded-lg bg-red-600 px-5 py-2 hover:bg-red-500"
+                        onClick={deleteManager}>
                         Supprimer
-
                     </button>
-
-
                 </div>
-
-
             </Section>
-
-
-        </div>
-
-
-    );
-
-
+        </div>);
 }

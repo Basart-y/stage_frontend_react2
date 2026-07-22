@@ -13,20 +13,18 @@ export default function ManagerLivraisonsPage() {
     }, []);
 
     return (<div className="space-y-8">
-            <PageTitle
-                title="Livraisons"
-                description="Suivi des livraisons dans l'écosystème des points relais."
-            />
+        <PageTitle
+            title="Livraisons"
+            description="Suivi des livraisons dans l'écosystème des points relais."
+        />
 
-            <TableauDonnees
-                columns={[{key: "reference", label: "Référence"}, {
-                    key: "commerceName",
-                    label: "Commerce"
-                }, {key: "relayName", label: "Point relais"}, {key: "status", label: "Statut"}, {
-                    key: "updatedAt",
-                    label: "Dernière mise à jour"
-                },]}
-                data={deliveries}
-            />
-        </div>);
+        <TableauDonnees
+            columns={[{key: "reference", label: "Référence"}, {
+                key: "commerceName", label: "Commerce"
+            }, {key: "relayName", label: "Point relais"}, {key: "status", label: "Statut"}, {
+                key: "updatedAt", label: "Dernière mise à jour"
+            },]}
+            data={deliveries}
+        />
+    </div>);
 }

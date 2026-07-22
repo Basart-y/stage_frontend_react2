@@ -13,79 +13,42 @@ import {translateStatus} from "@/utils/statusLabels";
 export default function ShopRequestsPage() {
 
     const [requests, setRequests] = useState([]);
-
     const router = useRouter();
 
-
     useEffect(() => {
-
         serviceManager
             .getShopRequests()
             .then(setRequests);
-
     }, []);
 
 
-    return (
-
-        <div className="space-y-8">
-
-
+    return (<div className="space-y-8">
             <PageTitle
                 title="Demandes commerces"
                 description="Validez ou refusez les demandes d'inscription des commerces."
             />
-
-
             <TableauDonnees
-
-                columns={[
-
-                    {
-                        key: "name", label: "Commerce"
-                    },
-
-
-                    {
-                        key: "city", label: "Ville"
-                    },
-
-
-                    {
-                        key: "email", label: "Email"
-                    },
-
-
-                    {
-                        key: "status", label: "Statut", render: (row) => (<span>
+                columns={[{
+                    key: "name", label: "Commerce"
+                }, {
+                    key: "city", label: "Ville"
+                }, {
+                    key: "email", label: "Email"
+                }, {
+                    key: "status", label: "Statut", render: (row) => (<span>
                                 {translateStatus(row.status)}
                             </span>)
-                    },
+                }, {
+                    key: "actions", label: "Actions", render: (row) => (
 
-
-                    {
-                        key: "actions", label: "Actions", render: (row) => (
-
-                            <button
-                                className="text-blue-400 underline"
-                                onClick={() => router.push(`/manager/demandes-commerces/${row.id}`)}
-                            >
-                                Voir détail
-                            </button>
-
-                        )
-                    }
-
-                ]}
-
-
+                        <button
+                            className="text-blue-400 underline"
+                            onClick={() => router.push(`/manager/demandes-commerces/${row.id}`)}
+                        >
+                            Voir détail
+                        </button>)
+                }]}
                 data={requests}
-
             />
-
-
-        </div>
-
-    );
-
+        </div>);
 }

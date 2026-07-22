@@ -14,8 +14,6 @@ const stats = [
     }, {
         label: "Points relais", value: "267"
     }];
-
-
 export default function StatisticsPage() {
     return (<div className="space-y-8">
             <PageTitle

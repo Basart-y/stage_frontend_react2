@@ -6,7 +6,6 @@ import Section from "@/composants/ui/Section";
 import Input from "@/composants/ui/Input";
 import Select from "@/composants/ui/Select";
 import Textarea from "@/composants/ui/Textarea";
-// import { serviceCommerce } from "@/services/commerce.service";
 
 export default function CommercePage() {
     const [form, setForm] = useState({
@@ -27,94 +26,91 @@ export default function CommercePage() {
 
     async function handleSave(e) {
         e.preventDefault();
-        // await serviceCommerce.save(form);
+        //plus tard await serviceCommerce.save(form);
         alert("Commerce enregistré (mock)");
     }
 
     return (<div className="space-y-8">
-            <PageTitle
-                title="Mon commerce"
-                description="Création ou modification des informations de votre commerce."
-            />
+        <PageTitle
+            title="Mon commerce"
+            description="Création ou modification des informations de votre commerce."
+        />
 
-            <form onSubmit={handleSave} className="space-y-8">
-                <Section title="Informations générales">
-                    <div className="grid gap-6 md:grid-cols-2">
-                        <Input
-                            label="Nom du commerce"
-                            placeholder="Mon commerce"
-                            value={form.name}
-                            onChange={(e) => handleChange("name", e.target.value)}
-                        />
-                        <Input
-                            label="SIRET"
-                            placeholder="00000000000000"
-                            value={form.siret}
-                            onChange={(e) => handleChange("siret", e.target.value)}
-                        />
-                        <Select
-                            label="Type de commerce"
-                            value={form.type}
-                            onChange={(e) => handleChange("type", e.target.value)}
-                        >
-                            <option value="">Sélectionnez un type</option>
-                            <option>Commerce physique</option>
-                            <option>E-commerce</option>
-                            <option>Producteur</option>
-                            <option>Marchand mobile</option>
-                        </Select>
-                        <Input
-                            label="Téléphone"
-                            placeholder="06..."
-                            value={form.phone}
-                            onChange={(e) => handleChange("phone", e.target.value)}
-                        />
-                    </div>
-                </Section>
-
-                <Section title="Adresse">
-                    <div className="grid gap-6 md:grid-cols-2">
-                        <Input
-                            label="Adresse"
-                            value={form.address}
-                            onChange={(e) => handleChange("address", e.target.value)}
-                        />
-                        <Input
-                            label="Ville"
-                            value={form.city}
-                            onChange={(e) => handleChange("city", e.target.value)}
-                        />
-                        <Input
-                            label="Code postal"
-                            value={form.postalCode}
-                            onChange={(e) => handleChange("postalCode", e.target.value)}
-                        />
-                        <Input
-                            label="Pays"
-                            placeholder="France"
-                            value={form.country}
-                            onChange={(e) => handleChange("country", e.target.value)}
-                        />
-                    </div>
-                </Section>
-
-                <Section title="Description">
-                    <Textarea
-                        label="Présentation"
-                        placeholder="Présentez votre commerce..."
-                        value={form.description}
-                        onChange={(e) => handleChange("description", e.target.value)}
+        <form onSubmit={handleSave} className="space-y-8">
+            <Section title="Informations générales">
+                <div className="grid gap-6 md:grid-cols-2">
+                    <Input
+                        label="Nom du commerce"
+                        placeholder="Mon commerce"
+                        value={form.name}
+                        onChange={(e) => handleChange("name", e.target.value)}
                     />
-                </Section>
-
-                <div className="flex justify-end">
-                    <button
-                        type="submit"
-                        className="rounded-lg bg-blue-600 px-6 py-3 font-medium"
+                    <Input
+                        label="SIRET"
+                        placeholder="00000000000000"
+                        value={form.siret}
+                        onChange={(e) => handleChange("siret", e.target.value)}
+                    />
+                    <Select
+                        label="Type de commerce"
+                        value={form.type}
+                        onChange={(e) => handleChange("type", e.target.value)}
                     >
-                        Enregistrer
-                    </button>
+                        <option value="">Sélectionnez un type</option>
+                        <option>Commerce physique</option>
+                        <option>E-commerce</option>
+                        <option>Producteur</option>
+                        <option>Marchand mobile</option>
+                    </Select>
+                    <Input
+                        label="Téléphone"
+                        placeholder="06..."
+                        value={form.phone}
+                        onChange={(e) => handleChange("phone", e.target.value)}
+                    />
                 </div>
-            </form>
-        </div>);
+            </Section>
+
+            <Section title="Adresse">
+                <div className="grid gap-6 md:grid-cols-2">
+                    <Input
+                        label="Adresse"
+                        value={form.address}
+                        onChange={(e) => handleChange("address", e.target.value)}
+                    />
+                    <Input
+                        label="Ville"
+                        value={form.city}
+                        onChange={(e) => handleChange("city", e.target.value)}
+                    />
+                    <Input
+                        label="Code postal"
+                        value={form.postalCode}
+                        onChange={(e) => handleChange("postalCode", e.target.value)}
+                    />
+                    <Input
+                        label="Pays"
+                        placeholder="France"
+                        value={form.country}
+                        onChange={(e) => handleChange("country", e.target.value)}
+                    />
+                </div>
+            </Section>
+
+            <Section title="Description">
+                <Textarea
+                    label="Présentation"
+                    placeholder="Présentez votre commerce..."
+                    value={form.description}
+                    onChange={(e) => handleChange("description", e.target.value)}
+                />
+            </Section>
+
+            <div className="flex justify-end">
+                <button type="submit" className="rounded-lg bg-blue-600 px-6 py-3 font-medium">
+                    Enregistrer
+                </button>
+            </div>
+        </form>
+    </div>);
 }

@@ -52,11 +52,8 @@ export default function PlanificationPage() {
                 type: formData.type,
                 date: formData.date,
                 comment: formData.comment,
-
                 relayPointId: selectedRelay.id,
-                relayPointName: selectedRelay.name,
-
-                // À utiliser plus tard avec l'authentification
+                relayPointName: selectedRelay.name, // plus tard avec l'authentification
                 // commerceId: currentUser.commerceId
             });
 
@@ -82,98 +79,97 @@ export default function PlanificationPage() {
     }
 
     return (<div className="space-y-8">
-            <PageTitle
-                title="Nouvelle livraison"
-                description="Planifiez une livraison vers un point relais."
-            />
+        <PageTitle
+            title="Nouvelle livraison"
+            description="Planifiez une livraison vers un point relais."
+        />
 
-            {submitResult && (<Alert
-                    type={submitResult.type}
-                    message={submitResult.message}
-                />)}
+        {submitResult && (<Alert
+            type={submitResult.type}
+            message={submitResult.message}
+        />)}
 
-            <Section title="Informations du colis">
-                <div className="grid gap-6 md:grid-cols-2">
-                    <Input
-                        label="Référence colis"
-                        name="reference"
-                        placeholder="COL-0001"
-                        value={formData.reference}
-                        onChange={handleChange}
-                    />
-
-                    <Input
-                        label="Nombre de colis"
-                        name="quantity"
-                        type="number"
-                        placeholder="1"
-                        value={formData.quantity}
-                        onChange={handleChange}
-                    />
-
-                    <Input
-                        label="Poids total (kg)"
-                        name="weight"
-                        type="number"
-                        placeholder="5"
-                        value={formData.weight}
-                        onChange={handleChange}
-                    />
-
-                    <Select
-                        label="Type de colis"
-                        name="type"
-                        value={formData.type}
-                        onChange={handleChange}
-                    >
-                        <option value="Standard">
-                            Standard
-                        </option>
-
-                        <option value="Fragile">
-                            Fragile
-                        </option>
-
-                        <option value="Volumineux">
-                            Volumineux
-                        </option>
-                    </Select>
-
-                    <Input
-                        label="Date souhaitée"
-                        name="date"
-                        type="date"
-                        value={formData.date}
-                        onChange={handleChange}
-                    />
-                </div>
-            </Section>
-
-            <Section title="Choix du point relais">
-                <SelectionPointRelais
-                    onSelect={setSelectedRelay}
-                />
-            </Section>
-
-            <Section title="Commentaires">
-                <Textarea
-                    label="Instructions particulières"
-                    name="comment"
-                    placeholder="Informations pour le transporteur..."
-                    value={formData.comment}
+        <Section title="Informations du colis">
+            <div className="grid gap-6 md:grid-cols-2">
+                <Input
+                    label="Référence colis"
+                    name="reference"
+                    placeholder="COL-0001"
+                    value={formData.reference}
                     onChange={handleChange}
                 />
-            </Section>
 
-            <div className="flex justify-end">
-                <button
-                    type="button"
-                    onClick={handleSubmit}
-                    disabled={!selectedRelay || isSubmitting}
-                    className="rounded-lg bg-green-600 px-6 py-3 font-medium text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50"
+                <Input
+                    label="Nombre de colis"
+                    name="quantity"
+                    type="number"
+                    placeholder="1"
+                    value={formData.quantity}
+                    onChange={handleChange}
+                />
+
+                <Input
+                    label="Poids total (kg)"
+                    name="weight"
+                    type="number"
+                    placeholder="5"
+                    value={formData.weight}
+                    onChange={handleChange}
+                />
+
+                <Select
+                    label="Type de colis"
+                    name="type"
+                    value={formData.type}
+                    onChange={handleChange}
                 >
-                    {isSubmitting ? "Création en cours..." : "Valider la planification"}
-                </button>
+                    <option value="Standard">
+                        Standard
+                    </option>
+
+                    <option value="Fragile">
+                        Fragile
+                    </option>
+
+                    <option value="Volumineux">
+                        Volumineux
+                    </option>
+                </Select>
+
+                <Input
+                    label="Date souhaitée"
+                    name="date"
+                    type="date"
+                    value={formData.date}
+                    onChange={handleChange}
+                />
             </div>
-        </div>);
+        </Section>
+
+        <Section title="Choix du point relais">
+            <SelectionPointRelais
+                onSelect={setSelectedRelay}
+            />
+        </Section>
+
+        <Section title="Commentaires">
+            <Textarea
+                label="Instructions particulières"
+                name="comment"
+                placeholder="Informations pour le transporteur..."
+                value={formData.comment}
+                onChange={handleChange}
+            />
+        </Section>
+
+        <div className="flex justify-end">
+            <button
+                type="button"
+                onClick={handleSubmit}
+                disabled={!selectedRelay || isSubmitting}
+                className="rounded-lg bg-green-600 px-6 py-3 font-medium text-white transition hover:bg-green-700 disabled:cursor-not-allowed disabled:opacity-50">
+                {isSubmitting ? "Création en cours..." : "Valider la planification"}
+            </button>
+        </div>
+    </div>);
 }

@@ -60,7 +60,6 @@ export default function SuperManagerProfilPage() {
 
                 <Section title="Informations de rôle">
                     <Input label="Rôle" value={form.role} disabled/>
-
                     <Textarea
                         label="Notes administrateur"
                         placeholder="Notes sur la plateforme, politiques, etc."

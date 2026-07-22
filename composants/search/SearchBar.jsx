@@ -1,8 +1,4 @@
-export default function SearchBar({
-                                      value,
-                                      onChange,
-                                      placeholder = "Rechercher..."
-                                  }) {
+export default function SearchBar({value, onChange, placeholder = "Rechercher..."}) {
     return (
         <input
             value={value}
