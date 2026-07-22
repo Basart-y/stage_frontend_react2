@@ -38,7 +38,7 @@ export default function ReceptionPage() {
                     Scanner QR Code
                 </button>
             </div>
-        </Section> // Partie manuelle
+        </Section>
         {mode === "manual" && (<Section title="Identification du colis">
             <Input
                 label="Référence colis"
@@ -47,7 +47,7 @@ export default function ReceptionPage() {
                 onChange={(e) => setParcelId(e.target.value)}
             />
         </Section>)}
-        // Partie QR visuel
+
         {mode === "qr" && (<Section title="Scanner le QR Code">
             <div
                 className="mx-auto flex h-64 w-full max-w-md items-center justify-center rounded-2xl border-2 border-dashed border-green-500 bg-slate-900">
