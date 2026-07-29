@@ -1,56 +1,30 @@
-import {managersMock} from "@/données/managers";
+import { serviceAdministration } from '@/services/ServiceAdministration.js';
 
 export const serviceSuperManager = {
-
-    async getManagers() {
-        return managersMock;
-    },
-
-
-    async getManagerById(id) {
-
-        return managersMock.find(manager => manager.id == id);
-
-    },
-
-
-    async createManager(data) {
-
-        const manager = {
-            id: Date.now(),
-            firstname: data.firstName,
-            lastname: data.lastName,
-            email: data.email,
-            phone: data.phone,
-            city: data.city,
-            sector: data.sector,
-            status: "ACTIVE"
-        };
-
-
-        managersMock.push(manager);
-
-
-        return manager;
-
-    },
-
-
-    async updateStatus(id, status) {
-
-        const manager = managersMock.find(manager => manager.id == id);
-
-
-        if (!manager) {
-            return null;
-        }
-
-
-        manager.status = status;
-
-
-        return manager;
-
-    }
-
+  async getManagers() {
+    return serviceAdministration.listUsers({ role: 'gestionnaire' });
+  },
+  async getManagerById(id) {
+    return serviceAdministration.getUser(id);
+  },
+  async createManager(data) {
+    return serviceAdministration.inviteUser({
+      email: data.email,
+      role: 'gestionnaire',
+      profile: {
+        prenom: data.firstName || '',
+        nomFamille: data.lastName || '',
+        telephone: data.phone || '',
+        ville: data.city || '',
+        departement: data.departement || (data.scopeLevel === 'departement' ? data.scopeValue : ''),
+      },
+      scope: {
+        niveau: data.scopeLevel || 'departement',
+        ...(data.scopeLevel === 'pays' ? {} : { valeur: data.scopeValue || data.city || '' }),
+      },
+    });
+  },
+  async updateStatus(id, status) {
+    return serviceAdministration.setStatus(id, status === 'ACTIVE' || status === 'actif' ? 'actif' : 'suspendu');
+  },
 };

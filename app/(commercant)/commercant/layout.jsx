@@ -1,29 +1,7 @@
 import DashboardShell from "@/composants/layout/DashboardShell";
-import Link from "next/link";
+import SidebarLink from "@/composants/layout/SidebarLink";
+import AuthGate from "@/composants/layout/AuthGate";
 
 export default function CommercantLayout({children}) {
-    return (<DashboardShell
-        sidebar={<nav className="space-y-2 text-sm">
-            <p className="text-xs font-semibold text-slate-400 mb-2">
-                Commerçant
-            </p>
-            <SidebarLink href="/commercant/dashboard" label="Tableau de bord"/>
-            <SidebarLink href="/commercant/commerce" label="Mon commerce"/>
-            <SidebarLink href="/commercant/livraisons" label="Livraisons"/>
-            <SidebarLink href="/commercant/planification" label="Planifier une livraison"/>
-            <SidebarLink href="/commercant/suivi" label="Suivi des colis"/>
-            <SidebarLink href="/commercant/profil" label="Profil"/>
-        </nav>}
-    >
-        {children}
-    </DashboardShell>);
-}
-
-function SidebarLink({href, label}) {
-    return (<Link
-        href={href}
-        className="block px-2 py-1 rounded-md hover:bg-slate-800"
-    >
-        {label}
-    </Link>);
+    return <AuthGate allowedRoles={["commercant", "super_gestionnaire"]}><DashboardShell role="Commerçant" sidebar={<nav className="flex gap-1 lg:block lg:space-y-1"><p className="hidden px-3 pb-3 text-xs font-bold uppercase tracking-[0.16em] text-slate-400 lg:block">Navigation commerçant</p><SidebarLink href="/commercant/dashboard" label="Tableau de bord"/><SidebarLink href="/commercant/commerce" label="Mon commerce"/><SidebarLink href="/commercant/livraisons" label="Livraisons"/><SidebarLink href="/commercant/planification" label="Planifier une livraison"/><SidebarLink href="/commercant/suivi" label="Suivi des colis"/><SidebarLink href="/commercant/signalements" label="Signalements"/><SidebarLink href="/commercant/notifications" label="Notifications"/><SidebarLink href="/commercant/profil" label="Profil"/></nav>}>{children}</DashboardShell></AuthGate>;
 }

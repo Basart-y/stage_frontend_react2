@@ -1,0 +1,4 @@
+import DashboardShell from "@/composants/layout/DashboardShell";
+import SidebarLink from "@/composants/layout/SidebarLink";
+import AuthGate from "@/composants/layout/AuthGate";
+export default function FinanceLayout({children}){return <AuthGate allowedRoles={["gestionnaire_financier", "super_gestionnaire"]}><DashboardShell role="Gestionnaire financier" sidebar={<nav className="flex gap-1 lg:block lg:space-y-1"><p className="hidden px-3 pb-3 text-xs font-bold uppercase tracking-[0.16em] text-slate-400 lg:block">Finance</p><SidebarLink href="/finance/dashboard" label="Tableau de bord"/><SidebarLink href="/finance/factures" label="Factures commerçants"/><SidebarLink href="/finance/paiements" label="Paiements relais"/><SidebarLink href="/finance/signalements" label="Litiges paiement"/><SidebarLink href="/finance/notifications" label="Notifications"/></nav>}>{children}</DashboardShell></AuthGate>}

@@ -1,11 +1,15 @@
 "use client";
 
+import Link from "next/link";
 import {useState} from "react";
+import {ArrowLeft} from "lucide-react";
 
 import Input from "@/composants/ui/Input";
 import Select from "@/composants/ui/Select";
 import Textarea from "@/composants/ui/Textarea";
 import Section from "@/composants/ui/Section";
+import Alert from "@/composants/ui/Alert";
+import {serviceRegistrationRequests} from "@/services/ServiceRegistrationRequests.js";
 
 
 export default function InscriptionPointRelaisPage() {
@@ -22,7 +26,7 @@ export default function InscriptionPointRelaisPage() {
 
 
         // Point relais
-        name: "", structureType: "", address: "", city: "", postalCode: "", country: "France",
+        name: "", structureType: "", address: "", city: "", department: "", postalCode: "", country: "France",
 
 
         // Gestion
@@ -37,6 +41,8 @@ export default function InscriptionPointRelaisPage() {
         description: "",
 
     });
+    const [feedback, setFeedback] = useState(null);
+    const [submitting, setSubmitting] = useState(false);
 
 
     function handleChange(field, value) {
@@ -75,14 +81,16 @@ export default function InscriptionPointRelaisPage() {
         }
 
 
-        // Plus tard :
-        // servicePointRelais.createRequest(form)
-
-
-        console.log("Demande inscription point relais", form);
-
-
-        alert("Demande d'inscription point relais envoyée (mock)");
+        setFeedback(null);
+        try {
+            setSubmitting(true);
+            await serviceRegistrationRequests.create({role: "point_relais", ...form});
+            setFeedback({type: "success", message: "Votre demande a bien été envoyée. Elle va être traitée."});
+        } catch (error) {
+            setFeedback({type: "error", message: error.message || "Impossible d’envoyer la demande."});
+        } finally {
+            setSubmitting(false);
+        }
 
     }
 
@@ -92,7 +100,9 @@ export default function InscriptionPointRelaisPage() {
         <main className="min-h-screen bg-slate-950 text-white">
 
 
-            <div className="mx-auto max-w-4xl px-4 py-16 space-y-8">
+            <div className="mx-auto max-w-4xl px-4 py-10 space-y-8">
+
+                <Link href="/inscription" className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-3.5 py-2 text-sm font-bold text-slate-200 transition hover:border-slate-600 hover:bg-slate-800"><ArrowLeft size={15}/> Choix du compte</Link>
 
 
                 <header className="space-y-2">
@@ -108,6 +118,8 @@ export default function InscriptionPointRelaisPage() {
 
                 </header>
 
+
+                {feedback && <Alert type={feedback.type} message={feedback.message}/>}
 
                 <form
                     onSubmit={handleSubmit}
@@ -251,6 +263,13 @@ export default function InscriptionPointRelaisPage() {
 
 
                             <Input
+                                label="Département"
+                                value={form.department}
+                                onChange={(e) => handleChange("department", e.target.value)}
+                                required
+                            />
+
+                            <Input
                                 label="Code postal"
                                 value={form.postalCode}
                                 onChange={(e) => handleChange("postalCode", e.target.value)}
@@ -377,18 +396,19 @@ Mercredi : fermé
 
                         <button
                             type="submit"
+                            disabled={submitting}
                             className="
                                 rounded-lg
                                 bg-blue-600
                                 px-6
                                 py-3
                                 font-medium
-                                hover:bg-blue-500
+                                hover:bg-blue-500/100
                                 transition
                             "
                         >
 
-                            Envoyer la demande
+                            {submitting ? "Envoi en cours..." : "Envoyer la demande"}
 
                         </button>
 

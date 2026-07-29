@@ -1,4 +1,4 @@
-import {pointsRelaisFictifs} from "@/données/pointsRelaisFictifs.js";
+import {pointsRelaisFictifs} from "@/donnees/pointsRelaisFictifs.js";
 
 export async function GET(request) {
 

@@ -124,14 +124,14 @@ export default function ManagerDetailPage() {
                     </button>
 
                     <button
-                        className="rounded-lg bg-blue-600 px-5 py-2hover:bg-blue-500"
+                        className="rounded-xl bg-blue-600 px-5 py-2.5 font-semibold text-white transition hover:bg-blue-700"
                         onClick={() => alert("Modification manager (mock)")}
                     >
                         Modifier
                     </button>
 
                     <button
-                        className="rounded-lg bg-red-600 px-5 py-2 hover:bg-red-500"
+                        className="rounded-lg bg-red-600 px-5 py-2 hover:bg-red-500/100"
                         onClick={deleteManager}>
                         Supprimer
                     </button>

@@ -1,28 +1,25 @@
 export const statusLabels = {
-    ACTIVE: "Actif", INACTIVE: "Inactif",
-
-    ACCEPTED: "Accepté", REFUSED: "Refusé",
-
-    ACTIF: "Actif", SUSPENDU: "Suspendu", INCIDENT: "Incident", MAINTENANCE: "Maintenance",
-
-    IN_TRANSIT: "En transit", AVAILABLE: "Disponible", RECEIVED: "Reçu", RECU: "Reçu", RETIRED: "Retiré",
-
-    PENDING: "En attente"
+    ACTIVE: "Actif",
+    ACTIF: "Actif",
+    INACTIVE: "Inactif",
+    PENDING: "En attente",
+    ACCEPTED: "Accepté",
+    REFUSED: "Refusé",
+    VACATION: "En pause",
+    EN_CONGES: "En congés",
+    INCIDENT: "Incident",
+    SUSPENDED: "Suspendu",
+    SUSPENDU: "Suspendu",
+    MAINTENANCE: "Maintenance",
+    IN_TRANSIT: "En transit",
+    EN_TRANSIT: "En transit",
+    AVAILABLE: "Disponible",
+    RECEIVED: "Reçu",
+    RECU: "Reçu",
+    RETIRED: "Retiré",
+    RETIRE: "Retiré",
 };
 
 export function translateStatus(status) {
-
-    const labels = {
-        ACTIVE: "Actif", INACTIVE: "Inactif",
-
-        PENDING: "En attente", ACCEPTED: "Accepté", REFUSED: "Refusé",
-
-        VACATION: "En pause", INCIDENT: "Incident", SUSPENDED: "Suspendu",
-
-        RECU: "Reçu", EN_TRANSIT: "En transit", RETIRE: "Retiré"
-    };
-
-
-    return labels[status] ?? status;
-
+    return statusLabels[status] ?? status ?? "—";
 }

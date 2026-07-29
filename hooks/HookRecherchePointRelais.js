@@ -41,13 +41,10 @@ export default function hookRecherchePointRelais() {
                     lat: Number(points[0].latitude), lng: Number(points[0].longitude),
                 };
 
-                points = [...points].sort((a, b) => {
-                    const distA = distance(center.lat, center.lng, Number(a.latitude), Number(a.longitude));
-
-                    const distB = distance(center.lat, center.lng, Number(b.latitude), Number(b.longitude));
-
-                    return distA - distB;
-                });
+                points = points.map((point) => ({
+                    ...point,
+                    distance: distance(center.lat, center.lng, Number(point.latitude), Number(point.longitude)),
+                })).sort((a, b) => a.distance - b.distance);
             }
 
             setRelayPoints(points.slice(0, MAX_RETURNED));

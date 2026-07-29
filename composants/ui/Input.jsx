@@ -1,21 +1,4 @@
-export default function Input({label, name, value, onChange, placeholder, type = "text"}) {
-    return (<div className="space-y-2">
-            {label && (<label
-                    className="text-sm text-slate-300"
-                    htmlFor={name}
-                >
-                    {label}
-                </label>)}
-
-            <input
-                id={name}
-                name={name}
-                type={type}
-                value={value ?? ""}
-                onChange={onChange ?? (() => {
-                })}
-                placeholder={placeholder}
-                className="w-full rounded-lg border border-slate-700 bg-slate-800 text-white p-3"
-            />
-        </div>);
+export default function Input({label, name, value, onChange, placeholder, type = "text", required = false, disabled = false, readOnly = false}) {
+    const valueProps = onChange ? {value: value ?? "", onChange} : {defaultValue: value ?? ""};
+    return <div className="space-y-2">{label && <label className="block text-[13px] font-semibold text-slate-200" htmlFor={name}>{label}</label>}<input id={name} name={name} type={type} {...valueProps} placeholder={placeholder} required={required} disabled={disabled} readOnly={readOnly} className="w-full rounded-xl border border-slate-700 bg-slate-900/70 px-3.5 py-2.5 text-[14px] text-slate-100 outline-none transition placeholder:text-slate-500 hover:border-slate-600 focus:border-blue-500 focus:bg-slate-900 focus:ring-4 focus:ring-blue-500/10 disabled:cursor-not-allowed disabled:bg-slate-900 disabled:text-slate-500 read-only:cursor-default"/></div>;
 }

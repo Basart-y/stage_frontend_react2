@@ -1,13 +1,13 @@
 import "./globals.css";
-import "leaflet/dist/leaflet.css";
 
 export const metadata = {
-    title: "Plateforme Points Relais", description: "Application de gestion de points relais et commerces"
+    title: "",
+    description: "Plateforme B2B de gestion de livraisons et points relais",
 };
 
 export default function RootLayout({children}) {
     return (<html lang="fr">
-    <body className="bg-slate-950 text-slate-100">
+    <body className="bg-slate-900/60 text-slate-100 antialiased">
     {children}
     </body>
     </html>);

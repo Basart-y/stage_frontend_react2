@@ -6,6 +6,7 @@ import {useRouter} from "next/navigation";
 import PageTitle from "@/composants/ui/PageTitle";
 import Section from "@/composants/ui/Section";
 import Input from "@/composants/ui/Input";
+import Select from "@/composants/ui/Select";
 import ActionButton from "@/composants/ui/ActionButton";
 
 import {serviceSuperManager} from "@/services/ServiceSuperManager.js";
@@ -15,7 +16,7 @@ export default function CreateManagerPage() {
     const router = useRouter();
 
     const [form, setForm] = useState({
-        firstName: "", lastName: "", email: "", phone: "", city: "", sector: ""
+        firstName: "", lastName: "", email: "", phone: "", city: "", sector: "", scopeLevel: "departement", scopeValue: "Bouches-du-Rhône"
     });
 
     function update(field, value) {
@@ -76,6 +77,10 @@ export default function CreateManagerPage() {
                     value={form.sector}
                     onChange={(e) => update("sector", e.target.value)}
                 />
+                <Select label="Niveau du périmètre" value={form.scopeLevel} onChange={(e)=>update("scopeLevel",e.target.value)}>
+                    <option value="ville">Ville</option><option value="departement">Département</option><option value="pays">Pays</option>
+                </Select>
+                {form.scopeLevel !== "pays" && <Input label="Valeur du périmètre" placeholder={form.scopeLevel === "ville" ? "Ex : Marseille" : "Ex : Bouches-du-Rhône"} value={form.scopeValue} onChange={(e)=>update("scopeValue",e.target.value)}/>}
 
                 <ActionButton color="blue" onClick={submit}>
                     Créer le manager

@@ -71,7 +71,7 @@ export default function SuperManagerProfilPage() {
                 <div className="flex justify-end">
                     <button
                         type="submit"
-                        className="rounded-lg bg-blue-600 px-6 py-3 font-medium"
+                        className="rounded-xl bg-blue-600 px-6 py-3 font-semibold text-white shadow-sm transition hover:bg-blue-700"
                     >
                         Enregistrer
                     </button>

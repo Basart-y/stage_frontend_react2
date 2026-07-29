@@ -1,4 +1,4 @@
-import {abonnementsFictifs} from "@/données/abonnementsFictifs.js";
+import {abonnementsFictifs} from "@/donnees/abonnementsFictifs.js";
 
 let currentSubscription = abonnementsFictifs[0];
 

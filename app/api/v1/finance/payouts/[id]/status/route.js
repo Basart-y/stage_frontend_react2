@@ -1,0 +1,2 @@
+import {ok,apiError} from '@/lib/backend/http.js';import {requireAuth} from '@/lib/backend/auth.js';import {changePayoutStatus} from '@/lib/backend/financeDomain.js';
+export async function PATCH(request,{params}){const a=await requireAuth(request,['gestionnaire_financier','super_gestionnaire']);if(a.error)return a.error;try{const {id}=await params;return ok(await changePayoutStatus(id,(await request.json()).status,a.claims));}catch(e){return apiError(e.message==='NOT_FOUND'?404:400,e.message,'Mise à jour impossible.');}}

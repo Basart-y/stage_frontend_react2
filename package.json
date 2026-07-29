@@ -4,19 +4,26 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "next dev",
+    "dev": "node server.js",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "start": "NODE_ENV=production node server.js",
+    "lint": "eslint",
+    "dev:next": "next dev",
+    "auth:check": "node --env-file=.env.local scripts_check_auth.js",
+    "auth:seed": "node --env-file=.env.local scripts_seed_supermanager.js",
+    "test:api": "node scripts_api_smoke_test.js"
   },
   "dependencies": {
-    "leaflet": "^1.9.4",
     "lucide-react": "^1.25.0",
     "next": "^16.2.10",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
-    "react-leaflet": "^5.0.0",
-    "tailwindcss": "^4.3.2"
+    "tailwindcss": "^4.3.2",
+    "mongodb": "^6.20.0",
+    "bcrypt": "^6.0.0",
+    "nodemailer": "^7.0.5",
+    "ws": "^8.18.3",
+    "web-push": "^3.6.7"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

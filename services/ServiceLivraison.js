@@ -1,84 +1,36 @@
-import {livraisonsFictives} from "@/données/livraisonsFictives.js";
-import serviceNotification from "@/services/ServiceNotification.js";
+import { apiRequest } from '@/services/api.js';
 
-let nextId = livraisonsFictives.length > 0 ? Math.max(...livraisonsFictives.map(d => d.id)) + 1 : 4;
+async function request(path, options = {}) {
+  return (await apiRequest(path, options)).data;
+}
 
 export const serviceLivraison = {
-    async getAll() {
-        return livraisonsFictives;
-    },
-
-    async findAll() {
-        return livraisonsFictives;
-    },
-
-    async findById(id) {
-        return livraisonsFictives.find((delivery) => delivery.id === id);
-    },
-
-    async updateStatus(id, status) {
-        const delivery = livraisonsFictives.find((delivery) => delivery.id === id);
-
-        if (!delivery) {
-            return null;
-        }
-
-        delivery.status = status;
-        return delivery;
-    },
-
-    /**
-     * Crée une nouvelle livraison (mock).
-     * data attendu :
-     * {
-     *   reference: string,
-     *   quantity: number,
-     *   weight: number,
-     *   type: string,
-     *   date: string,
-     *   relayPointId: number | string,
-     *   relayPointName: string,
-     *   comment?: string,
-     *   commerceId?: string | number
-     * }
-     */
-    async createDelivery(data) {
-        const newDelivery = {
-            id: nextId++,
-            reference: data.reference || `COL-${String(nextId).padStart(4, "0")}`,
-            quantity: data.quantity ?? 1,
-            weight: data.weight ?? 0,
-            type: data.type ?? "Standard",
-            date: data.date ?? new Date().toISOString().slice(0, 10),
-
-            relayPointId: data.relayPointId,
-            relayPoint: data.relayPointName || "Point relais",
-
-            comment: data.comment ?? "",
-            commerceId: data.commerceId,
-
-            status: "Créée",
-            createdAt: new Date().toISOString(),
-        };
-        livraisonsFictives.push(newDelivery);
-        await serviceNotification.create({
-            title: "Nouvelle livraison",
-            message: `La livraison ${newDelivery.reference} a été créée.`,
-            type: "Livraison"
-        });
-        return newDelivery;
-    },
-
-    /**
-     * Retourne les livraisons d'un commerçant (mock).
-     */
-    async getMyDeliveries(commerceId) {
-        if (!commerceId) {
-            return livraisonsFictives;
-        }
-
-        return livraisonsFictives.filter((delivery) => delivery.commerceId === commerceId);
-    },
+  async createDelivery(data) { return request('/api/v1/deliveries', { method:'POST', body:JSON.stringify(data) }); },
+  async getMyDeliveries() { return request('/api/v1/deliveries'); },
+  async getForRelay() { return request('/api/v1/deliveries'); },
+  async search(query) {
+    const deliveries = await request('/api/v1/deliveries');
+    const normalized = String(query || '').trim().toLowerCase();
+    if (!normalized) return deliveries;
+    return deliveries.filter(delivery => {
+      const client = `${delivery.client?.firstName || ''} ${delivery.client?.lastName || ''}`;
+      return `${delivery.reference} ${client} ${delivery.relayPoint || ''}`.toLowerCase().includes(normalized);
+    });
+  },
+  async findById(id) { return request(`/api/v1/deliveries/${id}`); },
+  async updateStatus(id, status, comment = '') { return request(`/api/v1/deliveries/${id}/transition`, { method:'POST', body:JSON.stringify({status,comment}) }); },
+  getAllowedTransitions(status) {
+    const map = {
+      'Créée':['En transit','Arrivé au point relais','Refusé','Retour demandé'], 'En transit':['Arrivé au point relais','Refusé','Retour demandé'],
+      'Arrivé au point relais':['Retiré','Retour demandé','Non récupéré'], 'Retour demandé':['Retourné'], 'Non récupéré':['Retour demandé','Retourné'],
+      'Refusé':['Retour demandé','Retourné'], 'Retiré':[], 'Retourné':[],
+    };
+    return [...(map[status] || [])];
+  },
+  async receive(id, comment='') { return this.updateStatus(id,'Arrivé au point relais',comment || 'Colis réceptionné et entré en stock.'); },
+  async refuse(id, reason) { return this.updateStatus(id,'Refusé',reason || 'Réception refusée.'); },
+  async handoff(id, proof={}) { return request(`/api/v1/deliveries/${id}/transition`, { method:'POST', body:JSON.stringify({status:'Retiré',comment:`Colis remis à ${proof.recipientName || 'la personne identifiée'}.`,proof}) }); },
+  async confirmReturn(id, reason='') { return this.updateStatus(id,'Retourné',reason || 'Retour physique confirmé par le point relais.'); },
+  async getAll() { return request('/api/v1/deliveries'); },
 };
-
 export default serviceLivraison;
