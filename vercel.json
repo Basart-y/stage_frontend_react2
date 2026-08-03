@@ -1,0 +1,7 @@
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "crons": [
+    {"path": "/api/v1/automations/mark-overdue-pickups", "schedule": "0 2 * * *"}
+  ]
+}

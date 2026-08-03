@@ -7,7 +7,7 @@ import servicePointRelais from "@/services/ServicePointRelais.js";
 const MAX_RESULTS = 100;
 const MAX_RETURNED = 50;
 
-export default function hookRecherchePointRelais() {
+export default function useRecherchePointRelais() {
     const [relayPoints, setRelayPoints] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);

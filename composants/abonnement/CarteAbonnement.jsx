@@ -3,13 +3,13 @@
 export default function CarteAbonnement({
                                             subscription, current, onSelect
                                         }) {
-    return (<div className={`rounded-xl border p-6 space-y-4 ${current ? "border-green-500 bg-green-500/10" : "border-slate-700"}`}
+    return (<div className={`rounded-xl border p-6 space-y-4 ${current ? "border-green-500 bg-green-500/10" : "border-slate-200"}`}
     >
         <h3 className="text-xl font-bold">
             {subscription.name}
         </h3>
 
-        <p className="text-slate-400">
+        <p className="text-slate-600">
             {subscription.description}
         </p>
 
@@ -28,11 +28,11 @@ export default function CarteAbonnement({
             </strong>
         </p>
 
-        {current ? (<span className="text-green-400">
+        {current ? (<span className="text-green-700">
                     Abonnement actuel
                 </span>) : (<button
             onClick={() => onSelect(subscription)}
-            className="rounded-xl bg-blue-600 px-5 py-2.5 font-semibold text-white shadow-sm transition hover:bg-blue-700"
+            className="rounded-xl bg-indigo-600 px-5 py-2.5 font-semibold text-white shadow-sm transition hover:bg-blue-700"
         >
             Choisir
         </button>)}

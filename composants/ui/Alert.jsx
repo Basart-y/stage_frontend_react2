@@ -1,8 +1,8 @@
 import {AlertCircle, CheckCircle2, Info} from "lucide-react";
 
 const variants = {
-    success: {classes: "border-emerald-200 bg-emerald-500/10 text-emerald-200", Icon: CheckCircle2},
-    error: {classes: "border-red-200 bg-red-500/10 text-red-200", Icon: AlertCircle},
+    success: {classes: "border-emerald-200 bg-emerald-50 text-emerald-800", Icon: CheckCircle2},
+    error: {classes: "border-red-200 bg-red-50 text-red-800", Icon: AlertCircle},
     info: {classes: "border-blue-200 bg-blue-500/10 text-blue-800", Icon: Info},
 };
 

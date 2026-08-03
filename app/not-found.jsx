@@ -8,12 +8,12 @@ export default function PageIntrouvable() {
                 <h1 className="text-5xl font-bold">
                     404
                 </h1>
-                <p className="text-slate-400">
+                <p className="text-slate-600">
                     Cette page n'existe pas.
                 </p>
                 <Link
                     href="/"
-                    className="inline-block rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-blue-700"
+                    className="inline-block rounded-xl bg-indigo-600 px-5 py-3 font-semibold text-white shadow-sm transition hover:bg-blue-700"
                 >
                     Retour accueil
                 </Link>

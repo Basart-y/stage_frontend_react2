@@ -53,7 +53,7 @@ export default function ManagerDetailPage() {
 
                 <div className="grid gap-6 md:grid-cols-2">
                     <div>
-                        <p className="text-sm text-slate-400">
+                        <p className="text-sm text-slate-600">
                             Prénom
                         </p>
                         <p className="font-medium">
@@ -61,7 +61,7 @@ export default function ManagerDetailPage() {
                         </p>
                     </div>
                     <div>
-                        <p className="text-sm text-slate-400">
+                        <p className="text-sm text-slate-600">
                             Nom
                         </p>
 
@@ -71,7 +71,7 @@ export default function ManagerDetailPage() {
                     </div>
 
                     <div>
-                        <p className="text-sm text-slate-400">
+                        <p className="text-sm text-slate-600">
                             Email
                         </p>
                         <p className="font-medium">
@@ -81,11 +81,11 @@ export default function ManagerDetailPage() {
                     </div>
 
                     <div>
-                        <p className="text-sm text-slate-400">
+                        <p className="text-sm text-slate-600">
                             Statut
                         </p>
                         <span
-                            className={`inline-block rounded-full px-3 py-1 text-xs ${manager.status === "ACTIVE" ? "bg-green-500/20 text-green-400" : "bg-red-500/20 text-red-400"}`}>
+                            className={`inline-block rounded-full px-3 py-1 text-xs ${manager.status === "ACTIVE" ? "bg-green-500/20 text-green-700" : "bg-red-500/20 text-red-700"}`}>
                             {manager.status}
                         </span>
 
@@ -93,7 +93,7 @@ export default function ManagerDetailPage() {
 
 
                     <div>
-                        <p className="text-sm text-slate-400">
+                        <p className="text-sm text-slate-600">
                             Région
                         </p>
                         <p className="font-medium">
@@ -124,7 +124,7 @@ export default function ManagerDetailPage() {
                     </button>
 
                     <button
-                        className="rounded-xl bg-blue-600 px-5 py-2.5 font-semibold text-white transition hover:bg-blue-700"
+                        className="rounded-xl bg-indigo-600 px-5 py-2.5 font-semibold text-white transition hover:bg-blue-700"
                         onClick={() => alert("Modification manager (mock)")}
                     >
                         Modifier

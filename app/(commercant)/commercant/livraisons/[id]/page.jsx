@@ -59,7 +59,7 @@ export default function LivraisonDetailPage() {
         return (
             <div className="space-y-6">
                 <Alert type="error" message={error || "Livraison introuvable."} />
-                <Link href="/commercant/livraisons" className="inline-flex items-center gap-2 text-sm font-semibold text-blue-400 hover:text-blue-300">
+                <Link href="/commercant/livraisons" className="inline-flex items-center gap-2 text-sm font-semibold text-blue-700 hover:text-blue-700">
                     <ArrowLeft size={16} /> Retour aux livraisons
                 </Link>
             </div>
@@ -69,58 +69,58 @@ export default function LivraisonDetailPage() {
     return (
         <div className="space-y-8">
             <div>
-                <Link href="/commercant/livraisons" className="mb-4 inline-flex items-center gap-2 text-sm font-semibold text-slate-500 hover:text-blue-400">
+                <Link href="/commercant/livraisons" className="mb-4 inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-blue-700">
                     <ArrowLeft size={16} /> Mes livraisons
                 </Link>
-                <PageTitle title={`Livraison ${delivery.reference}`} description="Consultez les informations, l’historique et déclenchez les actions disponibles." actions={<div className="flex flex-wrap gap-2"><Link href={`/commercant/livraisons/${delivery.id}/etiquette`} className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900/60 px-4 py-2.5 text-sm font-bold text-slate-200 hover:border-slate-600"><Printer size={16}/> Étiquette</Link>{!["Retiré", "Retourné", "Retour demandé"].includes(delivery.status) && <button onClick={requestReturn} className="inline-flex items-center gap-2 rounded-xl border border-orange-500/30 bg-orange-500/10 px-4 py-2.5 text-sm font-bold text-orange-300 transition hover:bg-orange-500/15"><RotateCcw size={16}/> Demander un retour</button>}</div>} />
+                <PageTitle title={`Livraison ${delivery.reference}`} description="Consultez les informations, l’historique et déclenchez les actions disponibles." actions={<div className="flex flex-wrap gap-2"><Link href={`/commercant/livraisons/${delivery.id}/etiquette`} className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-bold text-slate-700 hover:border-slate-300"><Printer size={16}/> Étiquette</Link>{!["Retiré", "Retourné", "Retour demandé"].includes(delivery.status) && <button onClick={requestReturn} className="inline-flex items-center gap-2 rounded-xl border border-orange-500/30 bg-orange-500/10 px-4 py-2.5 text-sm font-bold text-orange-800 transition hover:bg-orange-500/15"><RotateCcw size={16}/> Demander un retour</button>}</div>} />
             </div>
 
             {actionMessage && <Alert type="success" message={actionMessage}/>}
 
             <Section title="Informations principales">
                 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                    <div className="rounded-xl bg-slate-900/60 p-4">
-                        <Package size={18} className="text-blue-400" />
-                        <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Statut</p>
-                        <p className="mt-1 font-semibold text-slate-100">{delivery.status}</p>
+                    <div className="rounded-xl bg-slate-50 p-4">
+                        <Package size={18} className="text-blue-700" />
+                        <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Statut</p>
+                        <p className="mt-1 font-semibold text-slate-900">{delivery.status}</p>
                     </div>
-                    <div className="rounded-xl bg-slate-900/60 p-4">
-                        <MapPin size={18} className="text-blue-400" />
-                        <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Point relais</p>
-                        <p className="mt-1 font-semibold text-slate-100">{delivery.relayPoint || delivery.relayName || "—"}</p>
+                    <div className="rounded-xl bg-slate-50 p-4">
+                        <MapPin size={18} className="text-blue-700" />
+                        <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Point relais</p>
+                        <p className="mt-1 font-semibold text-slate-900">{delivery.relayPoint || delivery.relayName || "—"}</p>
                     </div>
-                    <div className="rounded-xl bg-slate-900/60 p-4">
-                        <Package size={18} className="text-blue-400" />
-                        <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Nombre de colis</p>
-                        <p className="mt-1 font-semibold text-slate-100">{delivery.quantity ?? "—"}</p>
+                    <div className="rounded-xl bg-slate-50 p-4">
+                        <Package size={18} className="text-blue-700" />
+                        <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Nombre de colis</p>
+                        <p className="mt-1 font-semibold text-slate-900">{delivery.quantity ?? "—"}</p>
                     </div>
-                    <div className="rounded-xl bg-slate-900/60 p-4">
-                        <Weight size={18} className="text-blue-400" />
-                        <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-slate-400">Poids total</p>
-                        <p className="mt-1 font-semibold text-slate-100">{delivery.weight ?? "—"} kg</p>
+                    <div className="rounded-xl bg-slate-50 p-4">
+                        <Weight size={18} className="text-blue-700" />
+                        <p className="mt-3 text-xs font-semibold uppercase tracking-wide text-slate-600">Poids total</p>
+                        <p className="mt-1 font-semibold text-slate-900">{delivery.weight ?? "—"} kg</p>
                     </div>
                 </div>
 
-                <dl className="mt-6 grid gap-4 border-t border-slate-800 pt-6 text-sm md:grid-cols-2">
-                    <div><dt className="text-slate-500">Type</dt><dd className="mt-1 font-medium text-slate-100">{delivery.type || "—"}</dd></div>
-                    <div><dt className="text-slate-500">Date prévue</dt><dd className="mt-1 font-medium text-slate-100">{formatDate(delivery.date)}</dd></div>
-                    <div><dt className="text-slate-500">Créée le</dt><dd className="mt-1 font-medium text-slate-100">{formatDate(delivery.createdAt)}</dd></div>
-                    <div><dt className="text-slate-500">Dernière mise à jour</dt><dd className="mt-1 font-medium text-slate-100">{formatDate(delivery.updatedAt)}</dd></div>
+                <dl className="mt-6 grid gap-4 border-t border-slate-200 pt-6 text-sm md:grid-cols-2">
+                    <div><dt className="text-slate-600">Type</dt><dd className="mt-1 font-medium text-slate-900">{delivery.type || "—"}</dd></div>
+                    <div><dt className="text-slate-600">Date prévue</dt><dd className="mt-1 font-medium text-slate-900">{formatDate(delivery.date)}</dd></div>
+                    <div><dt className="text-slate-600">Créée le</dt><dd className="mt-1 font-medium text-slate-900">{formatDate(delivery.createdAt)}</dd></div>
+                    <div><dt className="text-slate-600">Dernière mise à jour</dt><dd className="mt-1 font-medium text-slate-900">{formatDate(delivery.updatedAt)}</dd></div>
                 </dl>
 
-                <div className="mt-6 grid gap-4 border-t border-slate-800 pt-6 md:grid-cols-2">
-                    <div className="rounded-xl border border-slate-700 bg-slate-900/40 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Destinataire</p><p className="mt-2 font-bold text-slate-100">{delivery.client?.firstName} {delivery.client?.lastName}</p><p className="mt-1 text-sm text-slate-400">{delivery.client?.phone || "Téléphone non renseigné"}</p></div>
-                    <div className="rounded-xl border border-slate-700 bg-slate-900/40 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Acheminement</p><p className="mt-2 font-bold text-slate-100">{delivery.carrierName || "Livreur non renseigné"}</p><p className="mt-1 text-sm text-slate-400">{delivery.contents || "Contenu non renseigné"}</p></div>
+                <div className="mt-6 grid gap-4 border-t border-slate-200 pt-6 md:grid-cols-2">
+                    <div className="rounded-xl border border-slate-200 bg-white/40 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Destinataire</p><p className="mt-2 font-bold text-slate-900">{delivery.client?.firstName} {delivery.client?.lastName}</p><p className="mt-1 text-sm text-slate-600">{delivery.client?.phone || "Téléphone non renseigné"}</p></div>
+                    <div className="rounded-xl border border-slate-200 bg-white/40 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Acheminement</p><p className="mt-2 font-bold text-slate-900">{delivery.carrierName || "Livreur non renseigné"}</p><p className="mt-1 text-sm text-slate-600">{delivery.contents || "Contenu non renseigné"}</p></div>
                 </div>
 
-                {delivery.handoffProof && <div className="mt-4 rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-emerald-300">Preuve de remise</p><p className="mt-2 text-sm text-slate-200">Remis à <strong>{delivery.handoffProof.recipientName}</strong> · {delivery.handoffProof.identification?.replaceAll("_", " ")}</p><p className="mt-1 text-xs text-slate-400">{delivery.handoffProof.proofReference || "Preuve enregistrée"}</p></div>}
+                {delivery.handoffProof && <div className="mt-4 rounded-xl border border-indigo-500/20 bg-indigo-500/5 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-indigo-700">Preuve de remise</p><p className="mt-2 text-sm text-slate-700">Remis à <strong>{delivery.handoffProof.recipientName}</strong> · {delivery.handoffProof.identification?.replaceAll("_", " ")}</p><p className="mt-1 text-xs text-slate-600">{delivery.handoffProof.proofReference || "Preuve enregistrée"}</p></div>}
 
-                {delivery.refusalReason && <div className="mt-4 rounded-xl border border-rose-500/20 bg-rose-500/5 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-rose-300">Motif du refus</p><p className="mt-2 text-sm text-slate-200">{delivery.refusalReason}</p></div>}
+                {delivery.refusalReason && <div className="mt-4 rounded-xl border border-rose-500/20 bg-rose-500/5 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-rose-700">Motif du refus</p><p className="mt-2 text-sm text-slate-700">{delivery.refusalReason}</p></div>}
 
                 {delivery.comment && (
-                    <div className="mt-6 rounded-xl border border-slate-700 p-4">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">Instructions</p>
-                        <p className="mt-2 text-sm leading-6 text-slate-200">{delivery.comment}</p>
+                    <div className="mt-6 rounded-xl border border-slate-200 p-4">
+                        <p className="text-xs font-semibold uppercase tracking-wide text-slate-600">Instructions</p>
+                        <p className="mt-2 text-sm leading-6 text-slate-700">{delivery.comment}</p>
                     </div>
                 )}
             </Section>
@@ -128,15 +128,15 @@ export default function LivraisonDetailPage() {
             <Section title="Historique">
                 <div className="space-y-4">
                     {(delivery.history || []).length === 0 ? (
-                        <p className="text-sm text-slate-500">Aucun événement enregistré.</p>
+                        <p className="text-sm text-slate-600">Aucun événement enregistré.</p>
                     ) : (
                         [...delivery.history].reverse().map((item, index) => (
-                            <div key={`${item.date}-${index}`} className="flex gap-4 border-b border-slate-800 pb-4 last:border-0 last:pb-0">
+                            <div key={`${item.date}-${index}`} className="flex gap-4 border-b border-slate-200 pb-4 last:border-0 last:pb-0">
                                 <div className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-blue-600" />
                                 <div>
-                                    <p className="font-semibold text-slate-100">{item.status}</p>
-                                    <p className="mt-1 text-sm text-slate-500">{formatDate(item.date)}</p>
-                                    {item.comment && <p className="mt-1 text-sm text-slate-300">{item.comment}</p>}
+                                    <p className="font-semibold text-slate-900">{item.status}</p>
+                                    <p className="mt-1 text-sm text-slate-600">{formatDate(item.date)}</p>
+                                    {item.comment && <p className="mt-1 text-sm text-slate-700">{item.comment}</p>}
                                 </div>
                             </div>
                         ))

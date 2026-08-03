@@ -37,7 +37,7 @@ export default function ManagerDashboardPage() {
         {error && <Alert type="info" message={error}/>} 
         <GrillesStatistiques stats={stats}/>
         <div>
-            <h2 className="mb-4 text-lg font-bold text-slate-50">Actions principales</h2>
+            <h2 className="mb-4 text-lg font-bold text-slate-950">Actions principales</h2>
             <ActionsRapides actions={actions}/>
         </div>
     </section>;

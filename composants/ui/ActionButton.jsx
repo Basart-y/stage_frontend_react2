@@ -1,8 +1,8 @@
 const variants = {
     blue: "bg-blue-600 text-white shadow-blue-600/20 hover:bg-blue-700 focus:ring-blue-200",
-    green: "bg-emerald-600 text-white shadow-emerald-600/20 hover:bg-emerald-700 focus:ring-emerald-200",
+    green: "bg-indigo-600 text-white shadow-indigo-600/20 hover:bg-indigo-700 focus:ring-indigo-200",
     red: "bg-red-600 text-white shadow-red-600/20 hover:bg-red-700 focus:ring-red-200",
-    neutral: "border border-slate-700 bg-[#111b2b] text-slate-200 hover:border-slate-600 hover:bg-slate-900/60 focus:ring-slate-500/20",
+    neutral: "border border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50 focus:ring-slate-300/20",
 };
 
 export default function ActionButton({children, onClick, color = "blue", type = "button", disabled = false}) {

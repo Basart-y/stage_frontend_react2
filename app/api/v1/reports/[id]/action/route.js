@@ -3,6 +3,7 @@ import { requireAuth } from '@/lib/backend/auth.js';
 import { reportRepository } from '@/lib/backend/reportRepository.js';
 import { transitionReport } from '@/lib/backend/reportDomain.js';
 import { scopeAllows } from '@/lib/backend/geography.js';
+import { writeAuditTrace } from '@/lib/backend/auditDomain.js';
 
 export async function POST(request, { params }) {
   const auth = await requireAuth(request, ['gestionnaire','super_gestionnaire','gestionnaire_financier']);
@@ -15,7 +16,9 @@ export async function POST(request, { params }) {
   if (auth.claims.role === 'gestionnaire' && report.type === 'probleme_paiement') return apiError(403, 'FORBIDDEN', 'Les litiges de paiement sont réservés au Gestionnaire Financier.');
   if (auth.claims.role === 'gestionnaire_financier' && report.type !== 'probleme_paiement') return apiError(403, 'FORBIDDEN', 'Ce signalement n’est pas financier.');
   try {
-    return ok(await transitionReport(id, body.action, { id: auth.claims.sub, role: auth.claims.role }, body.comment));
+    const updated=await transitionReport(id, body.action, { id: auth.claims.sub, role: auth.claims.role }, body.comment);
+    await writeAuditTrace({request,eventType:'report.transitioned',action:'moderation.report.handle',actor:auth.claims,resourceType:'report',resourceId:id,before:report,after:updated,metadata:{businessAction:body.action}});
+    return ok(updated);
   } catch (error) {
     if (error.message === 'INVALID_REPORT_TRANSITION') return apiError(409, error.message, 'Cette transition de signalement n’est pas autorisée.');
     if (error.message === 'FORBIDDEN_REPORT_ACTION') return apiError(403, error.message, 'Vous ne pouvez pas effectuer cette action.');

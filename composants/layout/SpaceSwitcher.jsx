@@ -48,33 +48,33 @@ export default function SpaceSwitcher() {
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}
-        className="flex h-10 items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-3 text-sm font-bold text-slate-200 transition hover:border-slate-600 hover:text-white"
+        className="flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 text-sm font-bold text-slate-700 transition hover:border-slate-300 hover:text-slate-950"
         aria-expanded={open}
       >
-        <Layers3 size={16} className="text-blue-400" />
+        <Layers3 size={16} className="text-blue-700" />
         <span className="hidden sm:inline">{current?.label || "Changer d’espace"}</span>
         <ChevronDown size={15} />
       </button>
       {open && (
         <>
           <button className="fixed inset-0 z-40 cursor-default" aria-label="Fermer" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-12 z-50 w-72 overflow-hidden rounded-2xl border border-slate-700 bg-[#111b2b] p-2 shadow-2xl">
+          <div className="absolute right-0 top-12 z-50 w-72 overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-2xl">
             <div className="px-3 pb-2 pt-1">
-              <p className="text-[10px] font-black uppercase tracking-[.14em] text-blue-400">Accès multi-espace</p>
-              <p className="mt-1 text-xs leading-5 text-slate-500">Super Gestionnaire : ouvrez les vues des cinq espaces sans vous déconnecter.</p>
+              <p className="text-[10px] font-black uppercase tracking-[.14em] text-blue-700">Accès multi-espace</p>
+              <p className="mt-1 text-xs leading-5 text-slate-600">Super Gestionnaire : ouvrez les vues des cinq espaces sans vous déconnecter.</p>
             </div>
             {available.map((space) => (
               <button
                 key={space.role}
                 type="button"
                 onClick={() => { setOpen(false); router.push(space.href); }}
-                className={`flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-sm font-semibold transition ${space.role === currentRole ? "bg-blue-600 text-white" : "text-slate-300 hover:bg-slate-800 hover:text-white"}`}
+                className={`flex w-full items-center justify-between rounded-xl px-3 py-3 text-left text-sm font-semibold transition ${space.role === currentRole ? "bg-blue-600 text-white" : "text-slate-700 hover:bg-slate-100 hover:text-slate-950"}`}
               >
                 <span>{space.label}</span>
                 {space.role === user?.role && <span className="text-[10px] font-black uppercase opacity-70">rôle compte</span>}
               </button>
             ))}
-            <p className="px-3 pb-1 pt-2 text-[11px] leading-4 text-slate-500">Les droits API restent ceux du compte connecté. Une vue métier peut donc afficher certaines actions comme non autorisées.</p>
+            <p className="px-3 pb-1 pt-2 text-[11px] leading-4 text-slate-600">Les droits API restent ceux du compte connecté. Une vue métier peut donc afficher certaines actions comme non autorisées.</p>
           </div>
         </>
       )}

@@ -27,7 +27,7 @@ export const serviceAdministration = {
       if (value !== undefined && value !== null && value !== '') query.set(key, String(value));
     });
     const payload = await apiRequest(`/api/v1/users?${query.toString()}`);
-    return (payload.data || []).map(normalize);
+    return { data: (payload.data || []).map(normalize), pagination: payload.pagination || {} };
   },
 
   async inviteUser(input) {

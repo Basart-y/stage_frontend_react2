@@ -33,7 +33,7 @@ export default function NotificationList() {
         <div className="space-y-4">
             {notifications.length === 0 ?
 
-                (<p className="text-slate-400">
+                (<p className="text-slate-600">
                         Aucune notification
                     </p>)
 
@@ -43,7 +43,7 @@ export default function NotificationList() {
 
                     <div key={notification.id}
                          className={`rounded-xl border p-4
-                            ${notification.read ? "border-slate-700" : "border-blue-500 bg-blue-500/10"}
+                            ${notification.read ? "border-slate-200" : "border-blue-500 bg-blue-500/10"}
                         `}
                     >
 
@@ -52,14 +52,14 @@ export default function NotificationList() {
                         </h3>
 
 
-                        <p className="text-sm text-slate-400">
+                        <p className="text-sm text-slate-600">
                             {notification.message}
                         </p>
 
 
                         {!notification.read && (<button
                                 onClick={() => handleRead(notification.id)}
-                                className="mt-3 text-sm text-blue-400">
+                                className="mt-3 text-sm text-blue-700">
                                 Marquer comme lu
                             </button>)}
                     </div>))}

@@ -2,6 +2,7 @@ import { ok, apiError } from '@/lib/backend/http.js';
 import { requireAuth } from '@/lib/backend/auth.js';
 import { inviteUser } from '@/lib/backend/accountDomain.js';
 import { sendInvitationEmail } from '@/lib/backend/email.js';
+import { writeAuditTrace } from '@/lib/backend/auditDomain.js';
 
 export async function POST(request) {
   const auth = await requireAuth(request, ['gestionnaire','super_gestionnaire']);
@@ -22,6 +23,7 @@ export async function POST(request) {
     } catch (mailError) {
       emailDelivery = { sent: false, reason: mailError.message || 'EMAIL_SEND_FAILED' };
     }
+    await writeAuditTrace({request,eventType:'account.invited',action:'iam.invitation.write',actor:auth.claims,resourceType:'user',resourceId:result.user.id,after:result.user,metadata:{emailDelivery:emailDelivery.sent}});
     return ok({ ...result, activationUrl: activationUrl.toString(), emailDelivery }, { status: 201 });
   } catch (e) {
     const map = {

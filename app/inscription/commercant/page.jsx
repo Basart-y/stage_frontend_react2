@@ -46,14 +46,14 @@ export default function InscriptionCommercantPage() {
         }
     }
 
-    return (<main className="min-h-screen bg-slate-900/60 px-5 py-10 sm:px-8">
+    return (<main className="min-h-screen bg-slate-50 px-5 py-10 sm:px-8">
         <div className="mx-auto max-w-4xl space-y-8">
             <div>
-                <Link href="/inscription" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-300 hover:text-slate-50"><ArrowLeft size={16}/> Choix du compte</Link>
+                <Link href="/inscription" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-slate-950"><ArrowLeft size={16}/> Choix du compte</Link>
                 <div className="mt-6">
-                    <p className="text-sm font-bold uppercase tracking-[0.12em] text-blue-400">Compte commerçant</p>
-                    <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-50">Demande d’inscription</h1>
-                    <p className="mt-3 max-w-2xl leading-7 text-slate-300">Renseignez votre compte, votre commerce et votre mode de facturation. La demande sera ensuite traitée.</p>
+                    <p className="text-sm font-bold uppercase tracking-[0.12em] text-blue-700">Compte commerçant</p>
+                    <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">Demande d’inscription</h1>
+                    <p className="mt-3 max-w-2xl leading-7 text-slate-700">Renseignez votre compte, votre commerce et votre mode de facturation. La demande sera ensuite traitée.</p>
                 </div>
             </div>
 

@@ -11,7 +11,10 @@
     "dev:next": "next dev",
     "auth:check": "node --env-file=.env.local scripts_check_auth.js",
     "auth:seed": "node --env-file=.env.local scripts_seed_supermanager.js",
-    "test:api": "node scripts_api_smoke_test.js"
+    "test:api": "node scripts_api_smoke_test.js",
+    "test:cr": "node scripts_cr_compliance_test.js",
+    "test": "node --test tests/*.test.js",
+    "test:all": "npm run test && npm run test:cr"
   },
   "dependencies": {
     "lucide-react": "^1.25.0",

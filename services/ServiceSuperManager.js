@@ -2,7 +2,10 @@ import { serviceAdministration } from '@/services/ServiceAdministration.js';
 
 export const serviceSuperManager = {
   async getManagers() {
-    return serviceAdministration.listUsers({ role: 'gestionnaire' });
+    const result = await serviceAdministration.listUsers({ role: 'gestionnaire' });
+    // listUsers retourne un objet paginé { data, pagination }.
+    // Cette méthode expose uniquement le tableau attendu par la page Managers.
+    return Array.isArray(result) ? result : (Array.isArray(result?.data) ? result.data : []);
   },
   async getManagerById(id) {
     return serviceAdministration.getUser(id);

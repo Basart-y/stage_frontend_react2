@@ -10,9 +10,10 @@ export async function POST(request, { params }) {
   if (!body?.status) return apiError(400,'STATUS_REQUIRED','Le statut cible est requis.');
   try {
     const extra = {};
+    if (body.parcelCondition) extra.parcelCondition = body.parcelCondition;
     if (body.status === 'Retiré') extra.proof = { ...(body.proof || {}), date: new Date().toISOString() };
     if (body.status === 'Retourné') extra.returnedAt = new Date().toISOString();
-    return ok(await transitionDelivery(id, body.status, body.comment, extra, auth.claims));
+    return ok(await transitionDelivery(id, body.status, body.comment, extra, auth.claims, { request }));
   } catch (error) {
     const map = {
       DELIVERY_NOT_FOUND:[404,'Livraison introuvable.'], INVALID_TRANSITION:[409,'Cette transition d’état n’est pas autorisée.'],

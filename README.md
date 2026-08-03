@@ -49,3 +49,8 @@ Les écrans de comptes servent ensuite à consulter, suspendre ou réactiver les
 - Le montant d'un bon est recalculé côté serveur à partir des livraisons au statut `Retiré`.
 - Les bons en attente peuvent être marqués payés individuellement, par sélection ou tous en une fois.
 - Le système ne marque pas automatiquement une facture payée sans information externe de paiement : cela éviterait de valider un paiement qui n'a pas réellement été reçu.
+
+
+## Mise en conformité CR du 30/07
+
+Voir `DOCUMENTATION_TECHNIQUE_CR_30_07.md`, `DOCUMENTATION_FONCTIONNELLE_CR_30_07.md` et exécuter `npm run test:cr`.

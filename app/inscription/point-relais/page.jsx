@@ -97,12 +97,12 @@ export default function InscriptionPointRelaisPage() {
 
     return (
 
-        <main className="min-h-screen bg-slate-950 text-white">
+        <main className="min-h-screen bg-white text-slate-950">
 
 
             <div className="mx-auto max-w-4xl px-4 py-10 space-y-8">
 
-                <Link href="/inscription" className="inline-flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-900 px-3.5 py-2 text-sm font-bold text-slate-200 transition hover:border-slate-600 hover:bg-slate-800"><ArrowLeft size={15}/> Choix du compte</Link>
+                <Link href="/inscription" className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-sm font-bold text-slate-700 transition hover:border-slate-300 hover:bg-slate-100"><ArrowLeft size={15}/> Choix du compte</Link>
 
 
                 <header className="space-y-2">
@@ -112,7 +112,7 @@ export default function InscriptionPointRelaisPage() {
                     </h1>
 
 
-                    <p className="text-sm text-slate-400">
+                    <p className="text-sm text-slate-600">
                         Proposez votre établissement comme point relais.
                     </p>
 
@@ -403,7 +403,7 @@ Mercredi : fermé
                                 px-6
                                 py-3
                                 font-medium
-                                hover:bg-blue-500/100
+                                hover:bg-indigo-700/100
                                 transition
                             "
                         >

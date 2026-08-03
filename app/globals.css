@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 :root {
-  color-scheme: dark;
-  --rf-navy: #071426;
-  --rf-navy-soft: #0d1d33;
-  --rf-blue: #2563eb;
-  --rf-blue-strong: #1d4ed8;
-  --rf-cyan: #22d3ee;
-  --rf-surface: #111b2b;
-  --rf-canvas: #08111f;
-  --rf-border: #263449;
-  --rf-text: #e8eef7;
-  --rf-muted: #9aa9bd;
+  color-scheme: light;
+  --rf-primary: #365f87;
+  --rf-primary-hover: #294b6d;
+  --rf-accent: #4f79a3;
+  --rf-accent-soft: #f1f6fb;
+  --rf-surface: #ffffff;
+  --rf-surface-soft: #fafbfc;
+  --rf-canvas: #f5f7f9;
+  --rf-border: #e1e6eb;
+  --rf-text: #263442;
+  --rf-muted: #657382;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -19,9 +19,7 @@ html, body { margin: 0; padding: 0; min-height: 100%; }
 html { background: var(--rf-canvas); scroll-behavior: smooth; }
 body {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background:
-    radial-gradient(circle at 90% 0%, rgba(37, 99, 235, .10), transparent 28rem),
-    var(--rf-canvas);
+  background: var(--rf-canvas);
   color: var(--rf-text);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -30,36 +28,65 @@ a { color: inherit; text-decoration: none; }
 button, input, textarea, select { font: inherit; }
 button, a { -webkit-tap-highlight-color: transparent; }
 button { cursor: pointer; }
+button:disabled { cursor: not-allowed; }
 img { max-width: 100%; display: block; }
-::selection { background: #bfdbfe; color: #172554; }
+::selection { background: #dbeafe; color: #172554; }
+
+:where(a, button, input, textarea, select):focus-visible {
+  outline: 3px solid #60a5fa;
+  outline-offset: 2px;
+}
+
+input, textarea, select {
+  color: #0f172a;
+  background-color: #ffffff;
+}
+input::placeholder, textarea::placeholder {
+  color: #64748b;
+  opacity: 1;
+}
 
 .rf-grid-bg {
-  background-image:
-    linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
-  background-size: 34px 34px;
+  background-image: none;
 }
-
 .rf-dot-bg {
-  background-image: radial-gradient(rgba(37, 99, 235, .16) 1px, transparent 1px);
-  background-size: 18px 18px;
+  background-image: none;
 }
-
-.rf-card {
-  border: 1px solid rgba(71, 85, 105, .42);
-  background: rgba(17, 27, 43, .96);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, .18);
+.rf-card, .rf-panel {
+  border: 1px solid var(--rf-border);
+  background: var(--rf-surface);
+  color: var(--rf-text);
+  box-shadow: 0 2px 8px rgba(15,23,42,.04);
 }
-
+.rf-panel { border-radius: 1.25rem; }
 .rf-card-hover { transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
-.rf-card-hover:hover { transform: translateY(-2px); box-shadow: 0 18px 45px rgba(15,23,42,.09); border-color: #475569; }
-
-.rf-scrollbar { scrollbar-width: thin; scrollbar-color: #475569 transparent; }
-
-
-/* RelayFlow Lot 7 — visual polish */
-.rf-kicker { font-size: 10px; font-weight: 900; letter-spacing: .18em; text-transform: uppercase; color: #60a5fa; }
-.rf-panel { border: 1px solid rgba(71,85,105,.42); background: rgba(17,27,43,.96); border-radius: 1.75rem; box-shadow: 0 14px 42px rgba(15,23,42,.05); }
-.rf-status-dot { width: .5rem; height: .5rem; border-radius: 999px; background: #10b981; box-shadow: 0 0 0 5px rgba(16,185,129,.09); }
-@keyframes rfPulse { 0%,100% { opacity: 1 } 50% { opacity: .48 } }
+.rf-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 16px rgba(15,23,42,.07);
+  border-color: #c4d3e1;
+}
+.rf-scrollbar { scrollbar-width: thin; scrollbar-color: #94a3b8 transparent; }
+.rf-kicker {
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: #466b8e;
+}
+.rf-status-dot {
+  width: .5rem;
+  height: .5rem;
+  border-radius: 999px;
+  background: #527da5;
+  box-shadow: 0 0 0 4px rgba(82,125,165,.10);
+}
+@keyframes rfPulse { 0%,100%{opacity:1} 50%{opacity:.48} }
 .rf-live { animation: rfPulse 1.8s ease-in-out infinite; }
+
+
+/* Couche visuelle cohérente : contraste doux, cartes lisibles, actions clairement hiérarchisées. */
+.rf-soft-section {
+  border: 1px solid var(--rf-border);
+  background: #ffffff;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, .04);
+}

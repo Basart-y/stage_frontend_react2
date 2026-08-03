@@ -30,20 +30,20 @@ export default function Dashboard() {
     const recent = [...deliveries].slice(-4).reverse();
 
     return <div className="space-y-8">
-        <PageTitle title="Bonjour, votre réseau est prêt." description="Pilotez vos expéditions depuis un seul espace : création, sélection du relais, suivi et retours." actions={<Link href="/commercant/planification" className="inline-flex items-center gap-2 rounded-xl bg-slate-950 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-blue-700">Nouvel envoi <ArrowRight size={16}/></Link>}/>
+        <PageTitle title="Bonjour, votre réseau est prêt." description="Pilotez vos expéditions depuis un seul espace : création, sélection du relais, suivi et retours." actions={<Link href="/commercant/planification" className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-bold text-slate-950 shadow-sm transition hover:bg-blue-700">Nouvel envoi <ArrowRight size={16}/></Link>}/>
         <GrillesStatistiques stats={stats}/>
         <div>
             <Section title="Activité récente" description="Les dernières opérations enregistrées dans votre espace.">
                 <div className="space-y-1">{recent.length ? recent.map((delivery) => {
                     const Icon = statusIcon(delivery.status);
-                    return <Link href={`/commercant/livraisons/${delivery.id}`} key={delivery.id} className="group flex items-center gap-4 rounded-2xl px-3 py-3 transition hover:bg-slate-900/60">
-                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-300"><Icon size={17}/></span>
-                        <div className="min-w-0 flex-1"><div className="flex items-center gap-2"><p className="truncate text-sm font-bold text-slate-100">{delivery.reference}</p><span className="rounded-full bg-slate-800 px-2 py-0.5 text-[10px] font-bold text-slate-300">{delivery.status}</span></div><p className="mt-1 flex items-center gap-1.5 truncate text-xs text-slate-500"><MapPin size={12}/>{delivery.relayPoint || delivery.relayName || "Point relais"}</p></div>
-                        <ArrowRight size={15} className="text-slate-300 transition group-hover:translate-x-1 group-hover:text-blue-400"/>
+                    return <Link href={`/commercant/livraisons/${delivery.id}`} key={delivery.id} className="group flex items-center gap-4 rounded-2xl px-3 py-3 transition hover:bg-slate-50">
+                        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-700"><Icon size={17}/></span>
+                        <div className="min-w-0 flex-1"><div className="flex items-center gap-2"><p className="truncate text-sm font-bold text-slate-900">{delivery.reference}</p><span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-700">{delivery.status}</span></div><p className="mt-1 flex items-center gap-1.5 truncate text-xs text-slate-600"><MapPin size={12}/>{delivery.relayPoint || delivery.relayName || "Point relais"}</p></div>
+                        <ArrowRight size={15} className="text-slate-700 transition group-hover:translate-x-1 group-hover:text-blue-700"/>
                     </Link>;
-                }) : <p className="py-8 text-center text-sm text-slate-500">Créez une première livraison pour alimenter l'activité.</p>}</div>
+                }) : <p className="py-8 text-center text-sm text-slate-600">Créez une première livraison pour alimenter l'activité.</p>}</div>
             </Section>
         </div>
-        <div><div className="mb-4 flex items-end justify-between"><div><p className="rf-kicker">Raccourcis</p><h2 className="mt-1 text-lg font-black tracking-tight text-slate-50">Actions principales</h2></div></div><ActionsRapides actions={actions}/></div>
+        <div><div className="mb-4 flex items-end justify-between"><div><p className="rf-kicker">Raccourcis</p><h2 className="mt-1 text-lg font-black tracking-tight text-slate-950">Actions principales</h2></div></div><ActionsRapides actions={actions}/></div>
     </div>;
 }

@@ -14,10 +14,10 @@ function roleHome(role) {
 }
 
 export const serviceAuthentification = {
-  async login(email, password) {
+  async login(email, password, portalRole = null) {
     const payload = await apiRequest('/api/v1/auth/login', {
       method: 'POST',
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({ email, password, portalRole }),
     });
     const session = payload.data;
     if (typeof window !== 'undefined') {
@@ -51,6 +51,16 @@ export const serviceAuthentification = {
   },
 
   getHomeForRole: roleHome,
+
+  getPortalForRole(role) {
+    return {
+      commercant: '/connexion/commercant',
+      point_relais: '/connexion/point-relais',
+      gestionnaire: '/connexion/gestionnaire',
+      super_gestionnaire: '/connexion/super-gestionnaire',
+      gestionnaire_financier: '/connexion/finance',
+    }[role] || '/login';
+  },
 
   logout() {
     if (typeof window !== 'undefined') {
