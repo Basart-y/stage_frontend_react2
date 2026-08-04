@@ -1,10 +1,9 @@
 {
-  "/(commercant)/commercant/dashboard/page": "app/(commercant)/commercant/dashboard/page.js",
+  "/(supermanager)/supermanager/dashboard/page": "app/(supermanager)/supermanager/dashboard/page.js",
   "/api/v1/auth/login/route": "app/api/v1/auth/login/route.js",
   "/api/v1/auth/me/route": "app/api/v1/auth/me/route.js",
-  "/api/v1/deliveries/route": "app/api/v1/deliveries/route.js",
   "/api/v1/notifications/route": "app/api/v1/notifications/route.js",
-  "/connexion/commercant/page": "app/connexion/commercant/page.js",
+  "/connexion/super-gestionnaire/page": "app/connexion/super-gestionnaire/page.js",
   "/login/page": "app/login/page.js",
   "/page": "app/page.js"
 }

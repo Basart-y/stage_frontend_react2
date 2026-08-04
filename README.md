@@ -1,56 +1,87 @@
-# Plateforme logistique B2B — guide de démarrage et recette
+# Plateforme de gestion de points relais
 
-## Démarrage
+Application Next.js regroupant le frontend et les routes API pour gérer un réseau de points relais : comptes par rôle, livraisons, réception, remise, retours, signalements, notifications, traçabilité et finance.
 
-1. Vérifier que MongoDB est démarré localement.
-2. Dans le dossier du projet :
+## Rôles
+
+- Super gestionnaire
+- Gestionnaire
+- Commerçant
+- Point relais
+- Gestionnaire financier
+
+Les points relais sont des utilisateurs ayant `role: "point_relais"`. Leurs données métier sont conservées dans l'objet `profile` du document utilisateur.
+
+## Fonctionnalités principales
+
+- Portails de connexion séparés et contrôle des rôles côté serveur.
+- Création et suivi des livraisons avec machine à états.
+- Fiches détaillées de réception et de remise.
+- Refus, retour, historique et signalements.
+- Recherche des points relais, carte OpenStreetMap et géocodage depuis l'adresse.
+- Pagination et filtres des principales listes.
+- Notifications persistées, WebSocket et préparation Web Push.
+- Factures commerçants et bons de paiement des points relais.
+- Traces d'audit, logs JSON avec `requestId` et documentation OpenAPI.
+
+## Installation locale
+
+Prérequis : Node.js compatible avec Next.js et MongoDB local ou MongoDB Atlas.
 
 ```powershell
-npm install
-npm run auth:check
-npm run auth:seed -- admin@test.fr "Test123456!"
+Copy-Item .env.example .env.local
+npm ci
+npm run auth:seed -- admin@test.fr "ChoisirUnMotDePasseFort"
 npm run dev:next
 ```
 
-3. Ouvrir `http://localhost:3000/login`.
+Ouvrir `http://localhost:3000`.
 
-Compte de test initial : `admin@test.fr` / `Test123456!`.
+Ne jamais versionner `.env.local`. Le ZIP livré ne contient volontairement aucun secret.
 
-## Tests API
+## Variables d'environnement
 
-Dans un second terminal, avec le serveur déjà lancé :
+Les variables essentielles sont :
 
-```powershell
-npm run test:api
+```env
+MONGODB_URI=
+MONGODB_DB=relayflow
+JWT_SECRET=
+CRON_SECRET=
+BCRYPT_ROUNDS=12
+PICKUP_DEADLINE_DAYS=7
+ENABLE_INTERNAL_SCHEDULER=false
 ```
 
-Les scénarios manuels complémentaires sont dans `TEST_SCENARIOS_NOUVELLES_FONCTIONNALITES.md` et `TEST_RAPIDE_API.txt`.
+Les variables SMTP et VAPID sont nécessaires uniquement pour tester les invitations email et Web Push réels. Voir `.env.example` et `docs/DEPLOIEMENT_SECURITE_RECETTE.md`.
 
-## Corrections de cette version
+## Commandes
 
-- Les actions de signalement utilisent désormais les actions API attendues (`take`, `escalate`, `resolve`, `reject`).
-- Le Super Gestionnaire peut utiliser les actions de l’espace Finance lorsqu’il y accède depuis « Accédez aux espaces ».
-- Les textes d’inscription ne promettent plus qu’un rôle précis traitera la demande : la formulation indique simplement qu’elle sera traitée.
-- Le nom produit a été retiré de l’interface et remplacé par une petite pastille « Plateforme logistique B2B ».
-- La planification affiche les points relais sous forme de liste claire et permet de sélectionner directement le relais souhaité.
-- Les anciens guides et fichiers de lot ont été retirés. Ce README est le guide principal conservé.
+```powershell
+npm run test       # tests unitaires
+npm run test:cr    # conformité structurelle CR et sécurité
+npm run test:all   # ensemble des tests
+npm run lint
+npm run build
+npm run dev:next
+```
 
-## Gestion des comptes Commerçant et Point relais
+## État validé
 
-Les écrans Manager et Super Gestionnaire ne proposent plus de formulaire de création manuelle pour les comptes Commerçant ou Point relais.
+- Tests métier initiaux : 5/5 réussis.
+- Tests de limitation de connexion ajoutés.
+- Build Next.js de production validé.
+- MongoDB Atlas et déploiement Vercel testés.
+- OpenAPI disponible dans `openapi.yaml`.
 
-Le parcours retenu est : demande d'inscription → validation ou refus par un Manager / Super Gestionnaire → compte actif après validation.
-Les écrans de comptes servent ensuite à consulter, suspendre ou réactiver les comptes existants.
+## Sécurité intégrée
 
-## Finance - actions groupées
-- Les factures peuvent être générées pour tous les commerçants actifs ou pour une sélection.
-- Les factures en attente peuvent être marquées payées individuellement, par sélection ou toutes en une fois.
-- Les bons de paiement peuvent être générés pour tous les points relais actifs ou pour une sélection.
-- Le montant d'un bon est recalculé côté serveur à partir des livraisons au statut `Retiré`.
-- Les bons en attente peuvent être marqués payés individuellement, par sélection ou tous en une fois.
-- Le système ne marque pas automatiquement une facture payée sans information externe de paiement : cela éviterait de valider un paiement qui n'a pas réellement été reçu.
+- Mots de passe hachés avec bcrypt.
+- JWT signés et expirant après 15 minutes.
+- Contrôle du rôle, du statut et du périmètre côté serveur.
+- Limitation des tentatives de connexion avec réponse HTTP `429`.
+- En-têtes HTTP de sécurité, CSP, HSTS et protection anti-framing.
+- Logs de connexion anonymisés : aucun email ou mot de passe en clair.
+- Ancienne route publique de points relais fictifs supprimée.
 
-
-## Mise en conformité CR du 30/07
-
-Voir `DOCUMENTATION_TECHNIQUE_CR_30_07.md`, `DOCUMENTATION_FONCTIONNELLE_CR_30_07.md` et exécuter `npm run test:cr`.
+Pour une vraie exploitation publique, utiliser un utilisateur MongoDB limité à la base `relayflow`, changer les comptes de démonstration et effectuer la recette complète décrite dans le guide de déploiement.
