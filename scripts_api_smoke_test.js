@@ -1,7 +1,6 @@
-import crypto from 'node:crypto';
 const baseUrl = process.env.RELAYFLOW_BASE_URL || 'http://localhost:3000';
-const adminEmail = process.env.RELAYFLOW_ADMIN_EMAIL;
-const adminPassword = process.env.RELAYFLOW_ADMIN_PASSWORD;
+const adminEmail = process.env.RELAYFLOW_ADMIN_EMAIL || 'admin@test.fr';
+const adminPassword = process.env.RELAYFLOW_ADMIN_PASSWORD || 'Test123456!';
 
 let passed = 0;
 let failed = 0;
@@ -35,9 +34,6 @@ function check(name, condition, detail = '') {
 }
 
 async function main() {
-  if (!adminEmail || !adminPassword) {
-    throw new Error('Définissez RELAYFLOW_ADMIN_EMAIL et RELAYFLOW_ADMIN_PASSWORD avant le test API.');
-  }
   console.log(` API smoke test — ${baseUrl}`);
   console.log('Ce test crée deux demandes temporaires (commerçant + point relais) puis les valide.');
 
@@ -64,7 +60,7 @@ async function main() {
   const id = stamp();
   const merchantEmail = `smoke-commerce-${id}@example.test`;
   const relayEmail = `smoke-relais-${id}@example.test`;
-  const password = `Smoke-${crypto.randomUUID()}-aA1!`;
+  const password = 'Test123456!';
 
   const merchant = await request('/api/v1/registration-requests', {
     method: 'POST',

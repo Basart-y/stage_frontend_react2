@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 16, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/middleware.js"],"sourcesContent":["import {NextResponse} from 'next/server';\n\nexport function middleware(request) {\n  const requestHeaders = new Headers(request.headers);\n  const requestId = requestHeaders.get('x-request-id') || crypto.randomUUID();\n  requestHeaders.set('x-request-id', requestId);\n  const response = NextResponse.next({request: {headers: requestHeaders}});\n  response.headers.set('x-request-id', requestId);\n  return response;\n}\n\nexport const config = {matcher: ['/api/:path*']};\n"],"names":["middleware","request","requestHeaders","Headers","headers","requestId","get","crypto","randomUUID","set","response","next","config","matcher"],"mappings":";;;;;;AAAA;AAAA;;AAEO,SAASA,WAAWC,OAAO;IAChC,MAAMC,iBAAiB,IAAIC,QAAQF,QAAQG,OAAO;IAClD,MAAMC,YAAYH,eAAeI,GAAG,CAAC,mBAAmBC,OAAOC,UAAU;IACzEN,eAAeO,GAAG,CAAC,gBAAgBJ;IACnC,MAAMK,WAAW,6MAAY,CAACC,IAAI,CAAC;QAACV,SAAS;YAACG,SAASF;QAAc;IAAC;IACtEQ,SAASN,OAAO,CAACK,GAAG,CAAC,gBAAgBJ;IACrC,OAAOK;AACT;AAEO,MAAME,SAAS;IAACC,SAAS;QAAC;KAAc;AAAA"}}]
-}

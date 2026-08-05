@@ -1,0 +1,38 @@
+RELAYFLOW — TEST RAPIDE BACKEND / API
+=====================================
+
+1. Ouvrir PowerShell dans CE dossier (celui qui contient package.json).
+
+2. Vérifier la configuration :
+   npm run auth:check
+
+3. Créer le Super Gestionnaire si nécessaire :
+   npm run auth:seed -- admin@test.fr "Test123456!"
+
+4. Terminal PowerShell n°1 :
+   npm run dev:next
+
+5. Laisser le serveur tourner, puis ouvrir un DEUXIÈME PowerShell dans le même dossier :
+   npm run test:api
+
+Résultat attendu :
+- tous les tests affichent ✅ ;
+- ligne finale : 0 échec.
+
+Le test crée deux comptes de recette avec des emails @example.test.
+Pour tester les écrans, ouvrir ensuite : http://localhost:3000/login
+
+Pour la recette complète (livraisons, signalements, finance, notifications, automatisations, WebSocket), lire :
+TEST_SCENARIOS_NOUVELLES_FONCTIONNALITES.md
+
+CORRECTIONS À RETESTER DANS CETTE VERSION
+-----------------------------------------
+1. Signalements : depuis l'espace Manager, ouvrir un signalement OUVERT puis cliquer « Escalader ».
+   Attendu : succès, statut ESCALADE, puis le dossier disparaît de la liste Manager et apparaît dans « Arbitrages » du Super Gestionnaire.
+2. Finance avec un Super Gestionnaire : Accédez aux espaces > Gestionnaire financier > Factures commerçants.
+   Générer une facture puis la marquer payée.
+   Attendu : aucune erreur « Action non autorisée pour ce rôle ».
+3. Planification : rechercher plusieurs points relais avec coordonnées.
+   Attendu : la carte se recadre sur les résultats; un clic sur un point ou sur une carte de la liste sélectionne le relais.
+4. Inscription : après envoi d'une demande.
+   Attendu : message court « Votre demande a bien été envoyée. Elle va être traitée. » sans mention du Manager/Super Gestionnaire.

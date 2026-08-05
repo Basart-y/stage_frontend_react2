@@ -10,6 +10,8 @@ const dev = process.env.NODE_ENV !== 'production';
 const hostname = process.env.HOSTNAME || '0.0.0.0';
 const port = Number(process.env.PORT || 3000);
 const app = next({ dev, hostname, port });
+const handle = app.getRequestHandler();
+const handleUpgrade = app.getUpgradeHandler();
 
 function fromB64url(value) { return Buffer.from(value, 'base64url'); }
 async function hmac(data) {
@@ -58,8 +60,6 @@ async function currentUser(claims) {
 }
 
 await app.prepare();
-const handle = app.getRequestHandler();
-const handleUpgrade = app.getUpgradeHandler();
 const server = createServer((req, res) => handle(req, res));
 const wss = new WebSocketServer({ noServer: true });
 
