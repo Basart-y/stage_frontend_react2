@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { ArrowLeft, MapPin, Package, RotateCcw, Weight, Printer } from "lucide-react";
+import { ArrowLeft, MapPin, Package, Weight, Printer } from "lucide-react";
 import PageTitle from "@/composants/ui/PageTitle";
 import Section from "@/composants/ui/Section";
 import Loading from "@/composants/ui/Loading";
@@ -31,6 +31,7 @@ export default function LivraisonDetailPage() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
     const [actionMessage, setActionMessage] = useState("");
+    const [returnReason, setReturnReason] = useState("");
 
     useEffect(() => {
         serviceLivraison
@@ -47,7 +48,8 @@ export default function LivraisonDetailPage() {
     }, [id]);
 
     async function requestReturn() {
-        const updated = await serviceLivraison.updateStatus(delivery.id, "Retour demandé", "Retour demandé par le commerçant depuis son espace.");
+        if (!returnReason.trim()) { setActionMessage("Indiquez la raison du retour avant de valider."); return; }
+        const updated = await serviceLivraison.requestReturn(delivery.id, returnReason.trim());
         if (updated) { setDelivery(updated); setActionMessage("Demande de retour enregistrée. Le point relais peut désormais la traiter."); }
     }
 
@@ -72,10 +74,12 @@ export default function LivraisonDetailPage() {
                 <Link href="/commercant/livraisons" className="mb-4 inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-blue-700">
                     <ArrowLeft size={16} /> Mes livraisons
                 </Link>
-                <PageTitle title={`Livraison ${delivery.reference}`} description="Consultez les informations, l’historique et déclenchez les actions disponibles." actions={<div className="flex flex-wrap gap-2"><Link href={`/commercant/livraisons/${delivery.id}/etiquette`} className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-bold text-slate-700 hover:border-slate-300"><Printer size={16}/> Étiquette</Link>{!["Retiré", "Retourné", "Retour demandé"].includes(delivery.status) && <button onClick={requestReturn} className="inline-flex items-center gap-2 rounded-xl border border-orange-500/30 bg-orange-500/10 px-4 py-2.5 text-sm font-bold text-orange-800 transition hover:bg-orange-500/15"><RotateCcw size={16}/> Demander un retour</button>}</div>} />
+                <PageTitle title={`Livraison ${delivery.reference}`} description="Consultez les informations, l’historique et déclenchez les actions disponibles." actions={<div className="flex flex-wrap gap-2"><Link href={`/commercant/livraisons/${delivery.id}/etiquette`} className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-bold text-slate-700 hover:border-slate-300"><Printer size={16}/> Étiquette</Link></div>} />
             </div>
 
             {actionMessage && <Alert type="success" message={actionMessage}/>}
+
+            {! ["Retiré", "Retourné", "Retour demandé"].includes(delivery.status) && <Section title="Demander un retour"><textarea value={returnReason} onChange={(e)=>setReturnReason(e.target.value)} rows={3} placeholder="Raison du retour" className="w-full rounded-xl border border-slate-200 p-3 text-sm"/><button onClick={requestReturn} disabled={!returnReason.trim()} className="mt-3 rounded-xl bg-orange-600 px-4 py-2.5 text-sm font-bold text-white disabled:opacity-50">Confirmer la demande de retour</button></Section>}
 
             <Section title="Informations principales">
                 <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -114,6 +118,8 @@ export default function LivraisonDetailPage() {
                 </div>
 
                 {delivery.handoffProof && <div className="mt-4 rounded-xl border border-indigo-500/20 bg-indigo-500/5 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-indigo-700">Preuve de remise</p><p className="mt-2 text-sm text-slate-700">Remis à <strong>{delivery.handoffProof.recipientName}</strong> · {delivery.handoffProof.identification?.replaceAll("_", " ")}</p><p className="mt-1 text-xs text-slate-600">{delivery.handoffProof.proofReference || "Preuve enregistrée"}</p></div>}
+
+                {delivery.returnReason && <div className="mt-4 rounded-xl border border-orange-500/20 bg-orange-500/5 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-orange-700">Motif du retour</p><p className="mt-2 text-sm text-slate-700">{delivery.returnReason}</p></div>}
 
                 {delivery.refusalReason && <div className="mt-4 rounded-xl border border-rose-500/20 bg-rose-500/5 p-4"><p className="text-xs font-semibold uppercase tracking-wide text-rose-700">Motif du refus</p><p className="mt-2 text-sm text-slate-700">{delivery.refusalReason}</p></div>}
 

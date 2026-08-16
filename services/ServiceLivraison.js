@@ -18,7 +18,9 @@ export const serviceLivraison = {
     });
   },
   async findById(id) { return request(`/api/v1/deliveries/${id}`); },
-  async updateStatus(id, status, comment = '') { return request(`/api/v1/deliveries/${id}/transition`, { method:'POST', body:JSON.stringify({status,comment}) }); },
+  async updateStatus(id, status, comment = '', extra = {}) { return request(`/api/v1/deliveries/${id}/transition`, { method:'POST', body:JSON.stringify({status,comment,...extra}) }); },
+  async requestReturn(id, reason='') { return this.updateStatus(id,'Retour demandé',reason || 'Retour demandé par le commerçant.', {returnReason: reason || 'Retour demandé par le commerçant.'}); },
+  async requestReturns(ids, reason='') { return Promise.all(ids.map(id => this.requestReturn(id, reason))); },
   getAllowedTransitions(status) {
     const map = {
       'Créée':['En transit','Arrivé au point relais','Refusé','Retour demandé'], 'En transit':['Arrivé au point relais','Refusé','Retour demandé'],

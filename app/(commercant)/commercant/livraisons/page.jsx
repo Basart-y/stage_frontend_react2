@@ -1,51 +1,15 @@
 "use client";
-
 import Link from "next/link";
-import {useEffect, useMemo, useState} from "react";
-import {ArrowRight, Download, PackageSearch, Plus, Search} from "lucide-react";
-import PageTitle from "@/composants/ui/PageTitle";
-import Loading from "@/composants/ui/Loading";
-import Alert from "@/composants/ui/Alert";
-import serviceLivraison from "@/services/ServiceLivraison.js";
-
-function badge(status) {
-    const styles = {"Créée": "bg-blue-500/10 text-blue-700", "En transit": "bg-amber-500/10 text-amber-800", "Arrivé au point relais": "bg-violet-500/10 text-violet-700", "Retiré": "bg-indigo-500/10 text-indigo-700", "Retourné": "bg-rose-500/10 text-rose-700", "Retour demandé": "bg-orange-500/10 text-orange-800"};
-    return styles[status] || "bg-slate-100 text-slate-700";
-}
-
-export default function LivraisonsPage() {
-    const [deliveries, setDeliveries] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [query, setQuery] = useState("");
-    const [filter, setFilter] = useState("Toutes");
-    useEffect(() => { serviceLivraison.getMyDeliveries().then(setDeliveries).catch(() => setError("Impossible de charger les livraisons.")).finally(() => setLoading(false)); }, []);
-    const filtered = useMemo(() => deliveries.filter((delivery) => {
-        const matchQuery = `${delivery.reference} ${delivery.relayPoint || ""} ${delivery.status || ""}`.toLowerCase().includes(query.toLowerCase());
-        const matchFilter = filter === "Toutes" || delivery.status === filter;
-        return matchQuery && matchFilter;
-    }), [deliveries, query, filter]);
-    const statuses = ["Toutes", ...new Set(deliveries.map((item) => item.status).filter(Boolean))];
-    function exportCsv() {
-        const rows = [["Référence", "Statut", "Point relais", "Date", "Quantité", "Poids"], ...filtered.map((d) => [d.reference, d.status, d.relayPoint || d.relayName || "", d.date || "", d.quantity ?? "", d.weight ?? ""])];
-        const csv = rows.map((row) => row.map((v) => `"${String(v).replaceAll('"', '""')}"`).join(";")).join("\n");
-        const blob = new Blob(["\ufeff" + csv], {type: "text/csv;charset=utf-8"});
-        const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = "relayflow-livraisons.csv"; a.click(); URL.revokeObjectURL(url);
-    }
-
-    return <div className="space-y-6">
-        <PageTitle title="Mes livraisons" description="Recherchez, filtrez, exportez et suivez toutes vos expéditions." actions={<Link href="/commercant/planification" className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-blue-700"><Plus size={17}/> Nouvelle livraison</Link>}/>
-        {error && <Alert type="error" message={error}/>} 
-        <div className="rf-panel p-4 sm:p-5">
-            <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
-                <label className="relative flex-1"><Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600"/><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Référence, relais ou statut..." className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-3 text-sm outline-none focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"/></label>
-                <select value={filter} onChange={(e) => setFilter(e.target.value)} className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-semibold text-slate-700 outline-none focus:border-blue-500">{statuses.map((status) => <option key={status}>{status}</option>)}</select>
-                <button onClick={exportCsv} className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-bold text-slate-700 transition hover:bg-slate-50"><Download size={16}/> Export CSV</button>
-            </div>
-            <div className="mt-3 flex items-center justify-between text-xs text-slate-600"><span>{filtered.length} résultat(s)</span><span>{deliveries.length} livraison(s) au total</span></div>
-        </div>
-        {loading ? <Loading label="Chargement des livraisons..."/> : <div className="overflow-hidden rounded-[1.8rem] border border-slate-200 bg-white shadow-[0_12px_38px_rgba(15,23,42,.045)]">
-            {filtered.length === 0 ? <div className="p-12 text-center"><PackageSearch size={30} className="mx-auto text-slate-700"/><p className="mt-4 font-bold text-slate-700">Aucune livraison trouvée</p><p className="mt-1 text-sm text-slate-600">Modifiez la recherche ou créez une nouvelle livraison.</p></div> : <div className="divide-y divide-slate-800">{filtered.map((delivery) => <article key={delivery.id} className="group flex flex-col gap-4 p-5 transition hover:bg-slate-100/70 sm:flex-row sm:items-center sm:justify-between"><div className="min-w-0"><div className="flex flex-wrap items-center gap-3"><h3 className="font-black tracking-tight text-slate-950">{delivery.reference}</h3><span className={`rounded-full px-2.5 py-1 text-[11px] font-extrabold ${badge(delivery.status)}`}>{delivery.status}</span></div><p className="mt-2 truncate text-sm font-medium text-slate-700">{delivery.relayPoint || delivery.relayName || "Point relais non renseigné"}</p><p className="mt-1 text-xs text-slate-600">Prévue : {delivery.date || "—"} · {delivery.quantity ?? 1} colis · {delivery.weight ?? 0} kg</p></div><Link href={`/commercant/livraisons/${delivery.id}`} className="inline-flex shrink-0 items-center gap-2 text-sm font-bold text-blue-700 hover:text-blue-700">Voir le détail <ArrowRight size={16} className="transition group-hover:translate-x-1"/></Link></article>)}</div>}
-        </div>}
-    </div>;
-}
+import {useEffect,useMemo,useState} from "react";
+import {ArrowRight,Download,PackageSearch,Plus,Search,RotateCcw} from "lucide-react";
+import PageTitle from "@/composants/ui/PageTitle";import Loading from "@/composants/ui/Loading";import Alert from "@/composants/ui/Alert";import serviceLivraison from "@/services/ServiceLivraison.js";
+const terminal=new Set(["Retiré","Retourné","Retour demandé"]);
+function badge(s){const m={"Créée":"bg-blue-500/10 text-blue-700","En transit":"bg-amber-500/10 text-amber-800","Arrivé au point relais":"bg-violet-500/10 text-violet-700","Retiré":"bg-indigo-500/10 text-indigo-700","Retourné":"bg-rose-500/10 text-rose-700","Retour demandé":"bg-orange-500/10 text-orange-800","Non récupéré":"bg-red-500/10 text-red-700"};return m[s]||"bg-slate-100 text-slate-700"}
+export default function LivraisonsPage(){const[deliveries,setDeliveries]=useState([]),[loading,setLoading]=useState(true),[error,setError]=useState(null),[query,setQuery]=useState(""),[filter,setFilter]=useState("Toutes"),[selected,setSelected]=useState([]),[reason,setReason]=useState(""),[message,setMessage]=useState("");
+useEffect(()=>{serviceLivraison.getMyDeliveries().then(setDeliveries).catch(()=>setError("Impossible de charger les livraisons.")).finally(()=>setLoading(false))},[]);
+const filtered=useMemo(()=>deliveries.filter(d=>`${d.reference} ${d.relayPoint||""} ${d.status||""}`.toLowerCase().includes(query.toLowerCase())&&(filter==="Toutes"||d.status===filter)),[deliveries,query,filter]);const statuses=["Toutes",...new Set(deliveries.map(i=>i.status).filter(Boolean))];
+function toggle(id){setSelected(v=>v.includes(id)?v.filter(x=>x!==id):[...v,id])}function exportCsv(){const rows=[["Référence","Statut","Point relais","Date","Quantité","Poids"],...filtered.map(d=>[d.reference,d.status,d.relayPoint||d.relayName||"",d.date||"",d.quantity??"",d.weight??""])];const blob=new Blob(["\ufeff"+rows.map(r=>r.map(v=>`"${String(v).replaceAll('"','""')}"`).join(";")).join("\n")],{type:"text/csv;charset=utf-8"});const url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download="relayflow-livraisons.csv";a.click();URL.revokeObjectURL(url)}
+async function requestBulk(){if(!selected.length||!reason.trim())return;try{const updates=await serviceLivraison.requestReturns(selected,reason.trim());const byId=new Map(updates.map(x=>[String(x.id),x]));setDeliveries(v=>v.map(x=>byId.get(String(x.id))||x));setSelected([]);setReason("");setMessage(`${updates.length} demande(s) de retour enregistrée(s).`)}catch(e){setError(e.message||"Impossible d’enregistrer les retours.")}}
+return <div className="space-y-6"><PageTitle title="Mes livraisons" description="Recherchez, filtrez, exportez et demandez le retour d’un ou plusieurs colis." actions={<Link href="/commercant/planification" className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-bold text-white"><Plus size={17}/> Nouvelle livraison</Link>}/>{error&&<Alert type="error" message={error}/>} {message&&<Alert type="success" message={message}/>}<div className="rf-panel p-4 sm:p-5"><div className="flex flex-col gap-3 lg:flex-row"><label className="relative flex-1"><Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600"/><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Référence, relais ou statut..." className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-3 text-sm"/></label><select value={filter} onChange={e=>setFilter(e.target.value)} className="rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-semibold">{statuses.map(s=><option key={s}>{s}</option>)}</select><button onClick={exportCsv} className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold"><Download size={16}/> Export CSV</button></div></div>
+{selected.length>0&&<div className="rounded-2xl border border-orange-200 bg-orange-50 p-5"><div className="flex items-center gap-2 font-black text-orange-900"><RotateCcw size={18}/>{selected.length} colis sélectionné(s) pour retour</div><textarea value={reason} onChange={e=>setReason(e.target.value)} rows={3} placeholder="Raison du retour (obligatoire)" className="mt-3 w-full rounded-xl border border-orange-200 bg-white p-3 text-sm"/><div className="mt-3 flex gap-2"><button disabled={!reason.trim()} onClick={requestBulk} className="rounded-xl bg-orange-600 px-4 py-2.5 text-sm font-bold text-white disabled:opacity-50">Demander les retours</button><button onClick={()=>setSelected([])} className="rounded-xl border border-orange-200 bg-white px-4 py-2.5 text-sm font-bold">Annuler</button></div></div>}
+{loading?<Loading label="Chargement des livraisons..."/>:<div className="overflow-hidden rounded-[1.8rem] border border-slate-200 bg-white">{filtered.length===0?<div className="p-12 text-center"><PackageSearch size={30} className="mx-auto"/><p className="mt-4 font-bold">Aucune livraison trouvée</p></div>:<div className="divide-y divide-slate-200">{filtered.map(d=><article key={d.id} className="flex gap-4 p-5 sm:items-center"><input aria-label={`Sélectionner ${d.reference}`} type="checkbox" disabled={terminal.has(d.status)} checked={selected.includes(d.id)} onChange={()=>toggle(d.id)} className="h-4 w-4 disabled:opacity-30"/><div className="min-w-0 flex-1"><div className="flex flex-wrap items-center gap-3"><h3 className="font-black">{d.reference}</h3><span className={`rounded-full px-2.5 py-1 text-[11px] font-extrabold ${badge(d.status)}`}>{d.status}</span></div><p className="mt-2 text-sm text-slate-700">{d.relayPoint||d.relayName||"Point relais non renseigné"}</p>{d.returnReason&&<p className="mt-1 text-xs font-semibold text-orange-800">Motif du retour : {d.returnReason}</p>}</div><Link href={`/commercant/livraisons/${d.id}`} className="inline-flex items-center gap-2 text-sm font-bold text-blue-700">Voir le détail <ArrowRight size={16}/></Link></article>)}</div>}</div>}</div>}

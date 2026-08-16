@@ -3,7 +3,7 @@ import path from 'node:path';
 const root=process.cwd();
 const required=[
  'lib/backend/auditRepository.js','lib/backend/auditDomain.js','app/api/v1/audit-traces/route.js',
- 'app/(manager)/manager/tracabilite-technique/page.jsx','DOCUMENTATION_TECHNIQUE.md','DOCUMENTATION_FONCTIONNELLE.md',
+ 'app/(manager)/manager/tracabilite-technique/page.jsx','DOCUMENTATION_TECHNIQUE_CR_30_07.md','DOCUMENTATION_FONCTIONNELLE_CR_30_07.md',
  'app/connexion/commercant/page.jsx','app/connexion/point-relais/page.jsx','app/connexion/gestionnaire/page.jsx','app/connexion/super-gestionnaire/page.jsx','app/connexion/finance/page.jsx'
 ];
 let failed=false;

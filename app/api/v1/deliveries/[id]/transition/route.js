@@ -12,6 +12,7 @@ export async function POST(request, { params }) {
     const extra = {};
     if (body.parcelCondition) extra.parcelCondition = body.parcelCondition;
     if (body.status === 'Retiré') extra.proof = { ...(body.proof || {}), date: new Date().toISOString() };
+    if (body.status === 'Retour demandé') extra.returnReason = String(body.returnReason || body.comment || '').trim();
     if (body.status === 'Retourné') extra.returnedAt = new Date().toISOString();
     return ok(await transitionDelivery(id, body.status, body.comment, extra, auth.claims, { request }));
   } catch (error) {

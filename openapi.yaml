@@ -2,61 +2,631 @@ openapi: 3.0.3
 info:
   title: Relais Smart API
   version: 1.0.0
-paths:
-  /api/v1/relay-points:
-    get:
-      summary: Rechercher les points relais ouverts
-      parameters:
-        - {in: query, name: city, schema: {type: string}}
-        - {in: query, name: postalCode, schema: {type: string}}
-        - {in: query, name: department, schema: {type: string}}
-      responses:
-        '200': {description: Liste des points relais}
-        '401': {description: Non authentifié}
-        '500': {description: Erreur interne}
-  /api/v1/deliveries:
-    get:
-      summary: Lister les livraisons autorisées pour l'acteur connecté
-      responses:
-        '200': {description: Liste paginée}
-    post:
-      summary: Créer une livraison
-      responses:
-        '201': {description: Livraison créée}
-        '400': {description: Entrée invalide}
-        '403': {description: Action interdite}
+  description: API de gestion des utilisateurs, livraisons, points relais, signalements, notifications, finance et automatisations.
+servers:
+  - url: /
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
     ApiError:
       type: object
       properties:
         error:
           type: object
-          required: [code, message, requestId]
-          properties:
-            code: {type: string}
-            message: {type: string}
-            requestId: {type: string}
+security:
+  - bearerAuth: []
+paths:
+  /api/relay-points:
+    get:
+      operationId: get_api_relay_points
+      summary: GET /api/relay-points
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+    put:
+      operationId: put_api_relay_points
+      summary: PUT /api/relay-points
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/audit-traces:
+    get:
+      operationId: get_api_v1_audit_traces
+      summary: GET /api/v1/audit-traces
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/auth/login:
+    post:
+      operationId: post_api_v1_auth_login
+      summary: POST /api/v1/auth/login
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/auth/me:
+    get:
+      operationId: get_api_v1_auth_me
+      summary: GET /api/v1/auth/me
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/automations/mark-overdue-pickups:
+    post:
+      operationId: post_api_v1_automations_mark_overdue_pickups
+      summary: POST /api/v1/automations/mark-overdue-pickups
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/deliveries:
+    get:
+      operationId: get_api_v1_deliveries
+      summary: GET /api/v1/deliveries
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+    post:
+      operationId: post_api_v1_deliveries
+      summary: POST /api/v1/deliveries
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/deliveries/{id}:
+    get:
+      operationId: get_api_v1_deliveries_id
+      summary: GET /api/v1/deliveries/{id}
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/deliveries/{id}/transition:
+    post:
+      operationId: post_api_v1_deliveries_id_transition
+      summary: POST /api/v1/deliveries/{id}/transition
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/finance/invoices:
+    get:
+      operationId: get_api_v1_finance_invoices
+      summary: GET /api/v1/finance/invoices
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+    post:
+      operationId: post_api_v1_finance_invoices
+      summary: POST /api/v1/finance/invoices
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/finance/invoices/bulk:
+    post:
+      operationId: post_api_v1_finance_invoices_bulk
+      summary: POST /api/v1/finance/invoices/bulk
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/finance/invoices/bulk-status:
+    patch:
+      operationId: patch_api_v1_finance_invoices_bulk_status
+      summary: PATCH /api/v1/finance/invoices/bulk-status
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/finance/invoices/{id}/status:
+    patch:
+      operationId: patch_api_v1_finance_invoices_id_status
+      summary: PATCH /api/v1/finance/invoices/{id}/status
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/finance/payouts:
+    get:
+      operationId: get_api_v1_finance_payouts
+      summary: GET /api/v1/finance/payouts
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+    post:
+      operationId: post_api_v1_finance_payouts
+      summary: POST /api/v1/finance/payouts
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/finance/payouts/bulk:
+    post:
+      operationId: post_api_v1_finance_payouts_bulk
+      summary: POST /api/v1/finance/payouts/bulk
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/finance/payouts/bulk-status:
+    patch:
+      operationId: patch_api_v1_finance_payouts_bulk_status
+      summary: PATCH /api/v1/finance/payouts/bulk-status
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/finance/payouts/{id}/status:
+    patch:
+      operationId: patch_api_v1_finance_payouts_id_status
+      summary: PATCH /api/v1/finance/payouts/{id}/status
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/finance/summary:
+    get:
+      operationId: get_api_v1_finance_summary
+      summary: GET /api/v1/finance/summary
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
   /api/v1/geocoding/address:
     post:
-      summary: Calculer les coordonnées d'un point relais depuis son adresse
-      description: Route réservée au point relais connecté. Les coordonnées retournées restent modifiables dans le profil.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [address, city]
-              properties:
-                address: {type: string}
-                postalCode: {type: string}
-                city: {type: string}
-                department: {type: string}
+      operationId: post_api_v1_geocoding_address
+      summary: POST /api/v1/geocoding/address
       responses:
-        '200': {description: Coordonnées calculées}
-        '400': {description: Adresse incomplète}
-        '401': {description: Non authentifié}
-        '403': {description: Rôle non autorisé}
-        '404': {description: Adresse introuvable}
-        '502': {description: Service de géocodage indisponible}
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/invitations/accept:
+    post:
+      operationId: post_api_v1_invitations_accept
+      summary: POST /api/v1/invitations/accept
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/notifications:
+    get:
+      operationId: get_api_v1_notifications
+      summary: GET /api/v1/notifications
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/notifications/push-subscription:
+    post:
+      operationId: post_api_v1_notifications_push_subscription
+      summary: POST /api/v1/notifications/push-subscription
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+    delete:
+      operationId: delete_api_v1_notifications_push_subscription
+      summary: DELETE /api/v1/notifications/push-subscription
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/notifications/read:
+    post:
+      operationId: post_api_v1_notifications_read
+      summary: POST /api/v1/notifications/read
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/realtime/status:
+    get:
+      operationId: get_api_v1_realtime_status
+      summary: GET /api/v1/realtime/status
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/registration-requests:
+    get:
+      operationId: get_api_v1_registration_requests
+      summary: GET /api/v1/registration-requests
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+    post:
+      operationId: post_api_v1_registration_requests
+      summary: POST /api/v1/registration-requests
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/registration-requests/{id}:
+    patch:
+      operationId: patch_api_v1_registration_requests_id
+      summary: PATCH /api/v1/registration-requests/{id}
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/relay-points:
+    get:
+      operationId: get_api_v1_relay_points
+      summary: GET /api/v1/relay-points
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/relay-points/me:
+    get:
+      operationId: get_api_v1_relay_points_me
+      summary: GET /api/v1/relay-points/me
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+    patch:
+      operationId: patch_api_v1_relay_points_me
+      summary: PATCH /api/v1/relay-points/me
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/reports:
+    get:
+      operationId: get_api_v1_reports
+      summary: GET /api/v1/reports
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+    post:
+      operationId: post_api_v1_reports
+      summary: POST /api/v1/reports
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/reports/{id}:
+    get:
+      operationId: get_api_v1_reports_id
+      summary: GET /api/v1/reports/{id}
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/reports/{id}/action:
+    post:
+      operationId: post_api_v1_reports_id_action
+      summary: POST /api/v1/reports/{id}/action
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/users:
+    get:
+      operationId: get_api_v1_users
+      summary: GET /api/v1/users
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/users/invite:
+    post:
+      operationId: post_api_v1_users_invite
+      summary: POST /api/v1/users/invite
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/users/{id}:
+    get:
+      operationId: get_api_v1_users_id
+      summary: GET /api/v1/users/{id}
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+    patch:
+      operationId: patch_api_v1_users_id
+      summary: PATCH /api/v1/users/{id}
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
+  /api/v1/users/{id}/status:
+    patch:
+      operationId: patch_api_v1_users_id_status
+      summary: PATCH /api/v1/users/{id}/status
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Succès
+        '400':
+          description: Requête invalide
+        '401':
+          description: Authentification requise
+        '403':
+          description: Accès refusé
