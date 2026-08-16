@@ -23,3 +23,21 @@ test('les comparaisons géographiques ignorent casse et espaces', () => {
 test('un périmètre absent est considéré national', () => {
   assert.equal(scopeAllows(null, {departement:'Gironde', ville:'Bordeaux'}), true);
 });
+
+test("un périmètre régional PACA autorise les Bouches-du-Rhône", () => {
+  assert.equal(scopeAllows({niveau:'region', valeur:"Provence-Alpes-Côte d'Azur"}, {departement:'Bouches-du-Rhône', ville:'Marseille'}), true);
+  assert.equal(scopeAllows({niveau:'region', valeur:"Provence-Alpes-Côte d'Azur"}, {departement:'Haute-Garonne', ville:'Toulouse'}), false);
+});
+
+test("un ancien périmètre départemental contenant un nom de région reste compatible", () => {
+  assert.equal(scopeAllows({niveau:'departement', valeur:"Provence-Alpes-Côte d'Azur"}, {departement:'Bouches-du-Rhône', ville:'Marseille'}), true);
+});
+
+test("les codes départementaux sont reconnus pour les périmètres régionaux", () => {
+  assert.equal(scopeAllows({niveau:'region', valeur:'Occitanie'}, {departement:'34', ville:'Béziers'}), true);
+});
+
+test('PACA accepte les variantes courantes de Bouches-du-Rhône', () => {
+  assert.equal(scopeAllows({niveau:'region', valeur:'PACA'}, {departement:'Bouches du Rhone', ville:'Marseille'}), true);
+  assert.equal(scopeAllows({niveau:'région', valeur:"Provence-Alpes-Côte d’Azur"}, {departement:'13 - Bouches-du-Rhône', ville:'Marseille'}), true);
+});

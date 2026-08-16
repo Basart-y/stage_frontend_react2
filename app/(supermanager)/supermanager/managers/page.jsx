@@ -55,7 +55,7 @@ export default function ManagersPage() {
 
     return <div className="space-y-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-            <PageTitle title="Gestion des managers" description="Créez les Gestionnaires et définissez leur périmètre ville, département ou pays."/>
+            <PageTitle title="Gestion des managers" description="Créez les Gestionnaires et définissez leur périmètre ville, département, région ou pays."/>
             <button onClick={()=>setOpen(v=>!v)} className="rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-700">{open?"Fermer":"Créer un accès gestionnaire"}</button>
         </div>
         <div className="grid gap-4 sm:grid-cols-3"><Summary label="Total" value={managerList.length}/><Summary label="Actifs" value={activeCount}/><Summary label="À activer" value={managerList.filter(m=>m.statutCompte==='invite').length}/></div>
@@ -65,8 +65,8 @@ export default function ManagersPage() {
             <Field label="Prénom" value={form.firstName} onChange={v=>setForm({...form,firstName:v})}/><Field label="Nom" value={form.lastName} onChange={v=>setForm({...form,lastName:v})}/>
             <Field label="Email" type="email" required value={form.email} onChange={v=>setForm({...form,email:v})}/><Field label="Téléphone" value={form.phone} onChange={v=>setForm({...form,phone:v})}/>
             <Field label="Ville" value={form.city} onChange={v=>setForm({...form,city:v})}/><Field label="Département" value={form.departement} onChange={v=>setForm({...form,departement:v})}/>
-            <label className="space-y-2 text-sm font-medium text-slate-700"><span>Niveau du périmètre</span><select value={form.scopeLevel} onChange={e=>setForm({...form,scopeLevel:e.target.value,scopeValue:""})} className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5"><option value="ville">Ville</option><option value="departement">Département</option><option value="pays">Pays</option></select></label>
-            {form.scopeLevel!=='pays'&&<Field label={form.scopeLevel==='ville'?"Ville du périmètre":"Département du périmètre"} required value={form.scopeValue} onChange={v=>setForm({...form,scopeValue:v})}/>} 
+            <label className="space-y-2 text-sm font-medium text-slate-700"><span>Niveau du périmètre</span><select value={form.scopeLevel} onChange={e=>setForm({...form,scopeLevel:e.target.value,scopeValue:""})} className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5"><option value="ville">Ville</option><option value="departement">Département</option><option value="region">Région</option><option value="pays">Pays</option></select></label>
+            {form.scopeLevel!=='pays'&&<Field label={form.scopeLevel==='ville'?"Ville du périmètre":form.scopeLevel==='region'?"Région du périmètre":"Département du périmètre"} required value={form.scopeValue} onChange={v=>setForm({...form,scopeValue:v})}/>} 
             <div className="md:col-span-2"><button disabled={busy} className="rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-50">{busy?"Création…":"Créer l’invitation"}</button></div>
             {activationUrl&&<div className="md:col-span-2 rounded-xl border border-amber-700/50 bg-amber-500/10 p-4"><p className="text-sm font-semibold text-amber-900">Lien d’activation temporaire</p><p className="mt-2 break-all text-xs text-slate-700">{activationUrl}</p><button type="button" onClick={()=>navigator.clipboard.writeText(activationUrl)} className="mt-3 text-sm font-semibold text-blue-700 underline">Copier le lien</button></div>}
         </form>}

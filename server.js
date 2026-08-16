@@ -10,6 +10,9 @@ const dev = process.env.NODE_ENV !== 'production';
 const hostname = process.env.HOSTNAME || '0.0.0.0';
 const port = Number(process.env.PORT || 3000);
 const app = next({ dev, hostname, port });
+
+// Next.js doit être préparé avant de récupérer les handlers du custom server.
+await app.prepare();
 const handle = app.getRequestHandler();
 const handleUpgrade = app.getUpgradeHandler();
 
@@ -59,7 +62,6 @@ async function currentUser(claims) {
   return { id: String(claims.sub), role: claims.role };
 }
 
-await app.prepare();
 const server = createServer((req, res) => handle(req, res));
 const wss = new WebSocketServer({ noServer: true });
 

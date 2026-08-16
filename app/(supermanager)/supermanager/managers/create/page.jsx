@@ -78,9 +78,9 @@ export default function CreateManagerPage() {
                     onChange={(e) => update("sector", e.target.value)}
                 />
                 <Select label="Niveau du périmètre" value={form.scopeLevel} onChange={(e)=>update("scopeLevel",e.target.value)}>
-                    <option value="ville">Ville</option><option value="departement">Département</option><option value="pays">Pays</option>
+                    <option value="ville">Ville</option><option value="departement">Département</option><option value="region">Région</option><option value="pays">Pays</option>
                 </Select>
-                {form.scopeLevel !== "pays" && <Input label="Valeur du périmètre" placeholder={form.scopeLevel === "ville" ? "Ex : Marseille" : "Ex : Bouches-du-Rhône"} value={form.scopeValue} onChange={(e)=>update("scopeValue",e.target.value)}/>}
+                {form.scopeLevel !== "pays" && <Input label="Valeur du périmètre" placeholder={form.scopeLevel === "ville" ? "Ex : Marseille" : form.scopeLevel === "region" ? "Ex : Provence-Alpes-Côte d'Azur" : "Ex : Bouches-du-Rhône"} value={form.scopeValue} onChange={(e)=>update("scopeValue",e.target.value)}/>}
 
                 <ActionButton color="blue" onClick={submit}>
                     Créer le manager

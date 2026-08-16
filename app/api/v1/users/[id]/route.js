@@ -47,7 +47,7 @@ export async function PATCH(request, { params }) {
     patch.profile = profile;
   }
   if (body.scope && target.role === 'gestionnaire' && auth.claims.role === 'super_gestionnaire') {
-    if (!['ville','departement','pays'].includes(body.scope.niveau)) return apiError(400, 'INVALID_SCOPE', 'Périmètre invalide.');
+    if (!['ville','departement','region','pays'].includes(body.scope.niveau)) return apiError(400, 'INVALID_SCOPE', 'Périmètre invalide.');
     if (body.scope.niveau !== 'pays' && !String(body.scope.valeur || '').trim()) return apiError(400, 'INVALID_SCOPE', 'La valeur du périmètre est requise.');
     patch.scope = body.scope.niveau === 'pays' ? { niveau: 'pays' } : { niveau: body.scope.niveau, valeur: String(body.scope.valeur).trim() };
   }
