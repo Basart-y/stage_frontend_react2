@@ -371,13 +371,13 @@
   },
   {
     "route": "/finance/dashboard",
-    "firstLoadUncompressedJsBytes": 559374,
+    "firstLoadUncompressedJsBytes": 559407,
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\05-c3ty_6dwfk.js",
       ".next\\static\\chunks\\14mrh2-p_w84d.js",
       ".next\\static\\chunks\\1rxncug86bump.js",
       ".next\\static\\chunks\\3s8n6-ix6v0z4.js",
-      ".next\\static\\chunks\\1fr1u3mb-d0tz.js",
+      ".next\\static\\chunks\\1_b0cx7p5ce8j.js",
       ".next\\static\\chunks\\0-v1dsbzad4aq.js",
       ".next\\static\\chunks\\27jktro2p5rq9.js",
       ".next\\static\\chunks\\3hdj40qmts5sf.js",
@@ -707,13 +707,13 @@
   },
   {
     "route": "/finance/signalements",
-    "firstLoadUncompressedJsBytes": 554521,
+    "firstLoadUncompressedJsBytes": 554558,
     "firstLoadChunkPaths": [
       ".next\\static\\chunks\\05-c3ty_6dwfk.js",
       ".next\\static\\chunks\\14mrh2-p_w84d.js",
       ".next\\static\\chunks\\1rxncug86bump.js",
       ".next\\static\\chunks\\3s8n6-ix6v0z4.js",
-      ".next\\static\\chunks\\3k3ai5wmcnil9.js",
+      ".next\\static\\chunks\\3h43oj0j8kuud.js",
       ".next\\static\\chunks\\0-v1dsbzad4aq.js",
       ".next\\static\\chunks\\27jktro2p5rq9.js",
       ".next\\static\\chunks\\3hdj40qmts5sf.js",

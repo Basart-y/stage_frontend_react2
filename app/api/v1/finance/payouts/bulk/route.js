@@ -12,7 +12,9 @@ export async function POST(request){
     const period=String(body?.period||'').trim();
     if(!period)return apiError(400,'PERIOD_REQUIRED','La période est obligatoire.');
     const requested=Array.isArray(body?.relayPointIds)?body.relayPointIds.map(String):[];
-    const relays=(await userRepository.list({role:'point_relais',statutCompte:'actif',limit:1000})).filter(u=>!requested.length||requested.includes(String(u.id)));
+    const relayResult=await userRepository.list({role:'point_relais',statutCompte:'actif',limit:1000});
+    const relayRows=Array.isArray(relayResult)?relayResult:(relayResult?.rows||relayResult?.data||[]);
+    const relays=relayRows.filter(u=>!requested.length||requested.includes(String(u.id)));
     const existing=await financeRepository.listPayouts();
     const created=[]; const skipped=[];
     for(const relay of relays){

@@ -12,7 +12,9 @@ export async function POST(request){
     const period=String(body?.period||'').trim();
     if(!period) return apiError(400,'PERIOD_REQUIRED','La période est obligatoire.');
     const requested=Array.isArray(body?.merchantIds)?body.merchantIds.map(String):[];
-    const merchants=(await userRepository.list({role:'commercant',statutCompte:'actif',limit:1000})).filter(u=>!requested.length||requested.includes(String(u.id)));
+    const merchantResult=await userRepository.list({role:'commercant',statutCompte:'actif',limit:1000});
+    const merchantRows=Array.isArray(merchantResult)?merchantResult:(merchantResult?.rows||merchantResult?.data||[]);
+    const merchants=merchantRows.filter(u=>!requested.length||requested.includes(String(u.id)));
     const existing=await financeRepository.listInvoices();
     const created=[]; const skipped=[];
     for(const merchant of merchants){
