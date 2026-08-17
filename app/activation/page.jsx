@@ -1,113 +1,55 @@
 "use client";
 
 import Link from 'next/link';
-import { Suspense, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { apiRequest } from '@/services/api.js';
+import { DEPARTEMENTS_FRANCE, VILLES_PRINCIPALES, departementParCode, departementPourVille } from '@/donnees/geographieFrance.js';
+
+const emptyProfile = {
+  raisonSociale:'', siret:'', type:'', telephone:'', adresse:'', ville:'', departement:'', codeDepartement:'', codePostal:'', pays:'France', siteWeb:'', horaires:'', volumeColis:'', description:'', subscriptionType:'', subscriptionPlan:'',
+  prenomResponsable:'', nomResponsable:'', nom:'', typeStructure:'', capacite:'', statutOperationnel:'ouvert', services:{reception:true, withdrawal:true, returnPackage:true},
+};
+
+function Field({label, value, onChange, type='text', required=true, readOnly=false, ...props}) {
+  return <label className="block"><span className="mb-2 block text-xs font-bold text-slate-600">{label}</span><input {...props} required={required} readOnly={readOnly} type={type} value={value ?? ''} onChange={e=>onChange?.(e.target.value)} className={`h-12 w-full rounded-xl border border-slate-200 px-4 text-sm text-slate-900 outline-none focus:border-blue-500 ${readOnly?'bg-slate-100 text-slate-500':'bg-white'}`}/></label>;
+}
+function SelectField({label,value,onChange,children,required=true,disabled=false}) { return <label className="block"><span className="mb-2 block text-xs font-bold text-slate-600">{label}</span><select required={required} disabled={disabled} value={value ?? ''} onChange={e=>onChange(e.target.value)} className="h-12 w-full rounded-xl border border-slate-200 bg-white px-4 text-sm text-slate-900 outline-none focus:border-blue-500 disabled:bg-slate-100">{children}</select></label> }
+function TextArea({label,value,onChange,required=false}) { return <label className="block md:col-span-2"><span className="mb-2 block text-xs font-bold text-slate-600">{label}</span><textarea required={required} value={value ?? ''} onChange={e=>onChange(e.target.value)} rows={4} className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-blue-500"/></label> }
 
 function ActivationForm() {
-  const router = useRouter();
-  const params = useSearchParams();
-  const [email, setEmail] = useState(params.get('email') || '');
-  const [token, setToken] = useState(params.get('token') || '');
-  const [password, setPassword] = useState('');
-  const [confirmation, setConfirmation] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const router=useRouter(), params=useSearchParams();
+  const email=params.get('email')||'', token=params.get('token')||'';
+  const [invitation,setInvitation]=useState(null), [profile,setProfile]=useState(emptyProfile);
+  const [password,setPassword]=useState(''), [confirmation,setConfirmation]=useState('');
+  const [error,setError]=useState(''), [loading,setLoading]=useState(false), [checking,setChecking]=useState(true);
 
-  async function submit(event) {
-    event.preventDefault();
-    setError('');
+  useEffect(()=>{ let active=true; (async()=>{ try { const r=await apiRequest(`/api/v1/invitations/inspect?email=${encodeURIComponent(email)}&token=${encodeURIComponent(token)}`); if(!active)return; setInvitation(r.data); setProfile(p=>({...p,...(r.data.profile||{}), services:{...p.services,...(r.data.profile?.services||{})}})); } catch(e){ if(active)setError(e.message||'Invitation invalide.'); } finally { if(active)setChecking(false); } })(); return()=>{active=false}; },[email,token]);
+  const ch=(k,v)=>setProfile(p=>({...p,[k]:v}));
+  function changeVille(v){ const d=departementPourVille(v); setProfile(p=>({...p,ville:v,...(d?{departement:d.nom,codeDepartement:d.code}:{})})); }
+  function changeDepartement(code){ const d=departementParCode(code); setProfile(p=>({...p,codeDepartement:code,departement:d?.nom||''})); }
 
-    if (password !== confirmation) {
-      setError('Les mots de passe ne correspondent pas.');
-      return;
-    }
+  async function submit(e){ e.preventDefault(); setError(''); if(password!==confirmation){setError('Les mots de passe ne correspondent pas.');return;} setLoading(true); try { await apiRequest('/api/v1/invitations/accept',{method:'POST',body:JSON.stringify({email,token,password,profile})}); router.replace('/login?activated=1'); } catch(err){setError(err.message||'Activation impossible.');} finally{setLoading(false);} }
+  if(checking) return <main className="flex min-h-screen items-center justify-center bg-slate-50"><p className="font-semibold text-slate-600">Vérification de l’invitation…</p></main>;
 
-    setLoading(true);
-    try {
-      await apiRequest('/api/v1/invitations/accept', {
-        method: 'POST',
-        body: JSON.stringify({ email, token, password }),
-      });
-      router.replace('/login?activated=1');
-    } catch (err) {
-      setError(err.message || 'Activation impossible.');
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  const fields = [
-    ['E-mail', 'email', email, setEmail],
-    ["Jeton d’invitation", 'text', token, setToken],
-    ['Mot de passe', 'password', password, setPassword],
-    ['Confirmer le mot de passe', 'password', confirmation, setConfirmation],
-  ];
-
-  return (
-    <main className="flex min-h-screen items-center justify-center bg-slate-50 px-5 py-10">
-      <div className="w-full max-w-md">
-        <Link
-          href="/"
-          aria-label="Retour à l’accueil"
-          className="mb-8 inline-flex rounded-full border border-blue-400/20 bg-blue-400/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.13em] text-blue-800"
-        >
-          Accueil
-        </Link>
-        <p className="text-xs font-extrabold uppercase tracking-[.15em] text-blue-700">Invitation</p>
-        <h1 className="mt-3 text-3xl font-black tracking-[-.04em] text-slate-950">Activer votre compte</h1>
-        <p className="mt-3 text-sm leading-6 text-slate-600">
-          Saisissez les informations de l’invitation reçue puis choisissez votre mot de passe.
-        </p>
-
-        <form onSubmit={submit} className="mt-7 space-y-4 rounded-2xl border border-slate-200 bg-white p-6">
-          {fields.map(([label, type, value, setter]) => (
-            <label key={label} className="block">
-              <span className="mb-2 block text-xs font-bold text-slate-600">{label}</span>
-              <input
-                required
-                type={type}
-                minLength={type === 'password' ? 8 : undefined}
-                value={value}
-                onChange={(event) => setter(event.target.value)}
-                className="h-12 w-full rounded-xl border border-slate-200 bg-white/70 px-4 text-sm text-slate-900 outline-none focus:border-blue-500"
-              />
-            </label>
-          ))}
-
-          {error && (
-            <p className="rounded-xl bg-red-500/10 px-3 py-2.5 text-sm font-semibold text-red-700">{error}</p>
-          )}
-
-          <button
-            disabled={loading}
-            className="h-12 w-full rounded-xl bg-blue-600 text-sm font-extrabold text-white disabled:opacity-60"
-          >
-            {loading ? 'Activation…' : 'Activer mon compte'}
-          </button>
-        </form>
-
-        <p className="mt-5 text-sm text-slate-600">
-          <Link href="/login" className="font-bold text-blue-700">Retour à la connexion</Link>
-        </p>
-      </div>
-    </main>
-  );
+  const role=invitation?.role;
+  return <main className="min-h-screen bg-slate-50 px-5 py-10"><div className="mx-auto w-full max-w-4xl">
+    <Link href="/" className="mb-8 inline-flex rounded-full border border-blue-400/20 bg-blue-400/10 px-3 py-1.5 text-[10px] font-black uppercase tracking-[.13em] text-blue-800">Accueil</Link>
+    <p className="text-xs font-extrabold uppercase tracking-[.15em] text-blue-700">Invitation</p><h1 className="mt-3 text-3xl font-black tracking-[-.04em] text-slate-950">Compléter et activer votre compte</h1>
+    <p className="mt-3 text-sm leading-6 text-slate-600">Complétez toutes les informations de votre profil. Le compte ne sera activé qu’après validation du formulaire complet.</p>
+    {error && !invitation ? <p className="mt-7 rounded-xl bg-red-500/10 px-4 py-3 font-semibold text-red-700">{error}</p> : invitation && <form onSubmit={submit} className="mt-7 space-y-6">
+      <section className="rounded-2xl border border-slate-200 bg-white p-6"><h2 className="mb-4 font-black text-slate-900">Compte</h2><div className="grid gap-4 md:grid-cols-2"><Field label="E-mail" value={email} readOnly/><Field label="Rôle" value={role==='point_relais'?'Point relais':role==='commercant'?'Commerçant':role} readOnly/></div></section>
+      {role==='commercant' && <Merchant profile={profile} ch={ch} changeVille={changeVille} changeDepartement={changeDepartement}/>} 
+      {role==='point_relais' && <Relay profile={profile} ch={ch} changeVille={changeVille} changeDepartement={changeDepartement}/>} 
+      <section className="rounded-2xl border border-slate-200 bg-white p-6"><h2 className="mb-4 font-black text-slate-900">Sécurité</h2><div className="grid gap-4 md:grid-cols-2"><Field label="Mot de passe" type="password" minLength={8} value={password} onChange={setPassword}/><Field label="Confirmer le mot de passe" type="password" minLength={8} value={confirmation} onChange={setConfirmation}/></div></section>
+      {error && <p className="rounded-xl bg-red-500/10 px-4 py-3 font-semibold text-red-700">{error}</p>}<button disabled={loading} className="h-12 w-full rounded-xl bg-blue-600 font-extrabold text-white disabled:opacity-60">{loading?'Activation…':'Enregistrer le profil et activer mon compte'}</button>
+    </form>}
+  </div></main>;
 }
 
-function ActivationFallback() {
-  return (
-    <main className="flex min-h-screen items-center justify-center bg-slate-50 px-5 py-10">
-      <p className="text-sm font-semibold text-slate-600">Chargement de l’activation…</p>
-    </main>
-  );
-}
+function GeoFields({p,changeVille,changeDepartement}) { const lockedVille=Boolean(p.__lockedVille); return <><label className="block"><span className="mb-2 block text-xs font-bold text-slate-600">Ville</span><input required list="villes-activation" value={p.ville||''} onChange={e=>changeVille(e.target.value)} className="h-12 w-full rounded-xl border border-slate-200 px-4 text-sm"/><datalist id="villes-activation">{VILLES_PRINCIPALES.map(v=><option key={`${v.nom}-${v.departementCode}`} value={v.nom}/>)}</datalist></label><SelectField label="Département" value={p.codeDepartement||''} onChange={changeDepartement}><option value="">Sélectionner</option>{DEPARTEMENTS_FRANCE.map(d=><option key={d.code} value={d.code}>{d.code} - {d.nom}</option>)}</SelectField></> }
+function Merchant({profile:p,ch,changeVille,changeDepartement}) { return <section className="rounded-2xl border border-slate-200 bg-white p-6"><h2 className="mb-4 font-black text-slate-900">Informations du commerce</h2><div className="grid gap-4 md:grid-cols-2"><Field label="Nom / raison sociale" value={p.raisonSociale} onChange={v=>ch('raisonSociale',v)}/><Field label="SIRET" value={p.siret} onChange={v=>ch('siret',v)}/><SelectField label="Type de commerce" value={p.type} onChange={v=>ch('type',v)}><option value="">Sélectionner</option><option value="COMMERCE_PHYSIQUE">Commerce physique</option><option value="ECOMMERCE">E-commerce</option><option value="PRODUCTEUR">Producteur</option><option value="MOBILE">Marchand mobile</option></SelectField><Field label="Téléphone" value={p.telephone} onChange={v=>ch('telephone',v)}/><Field label="Adresse" value={p.adresse} onChange={v=>ch('adresse',v)}/><GeoFields p={p} changeVille={changeVille} changeDepartement={changeDepartement}/><Field label="Code postal" value={p.codePostal} onChange={v=>ch('codePostal',v)}/><Field label="Pays" value={p.pays} readOnly/><Field label="Site web" required={false} value={p.siteWeb} onChange={v=>ch('siteWeb',v)}/><Field label="Volume estimé de colis / mois" required={false} type="number" min="0" value={p.volumeColis} onChange={v=>ch('volumeColis',v)}/><TextArea label="Horaires" value={p.horaires} onChange={v=>ch('horaires',v)}/><TextArea label="Présentation du commerce" value={p.description} onChange={v=>ch('description',v)}/><SelectField label="Mode de facturation" value={p.subscriptionType} onChange={v=>ch('subscriptionType',v)}><option value="">Sélectionner</option><option value="FORFAIT">Abonnement forfaitaire</option><option value="COMMANDE">Paiement à la commande</option></SelectField>{p.subscriptionType==='FORFAIT'&&<SelectField label="Formule" value={p.subscriptionPlan} onChange={v=>ch('subscriptionPlan',v)}><option value="">Sélectionner</option><option value="ESSENTIEL">Starter — 25 colis/mois</option><option value="PROFESSIONNEL">Pro — 150 colis/mois</option><option value="ENTREPRISE">Business — 500 colis/mois</option></SelectField>}</div></section> }
+function Relay({profile:p,ch,changeVille,changeDepartement}) { const service=(k,v)=>ch('services',{...(p.services||{}),[k]:v}); return <section className="rounded-2xl border border-slate-200 bg-white p-6"><h2 className="mb-4 font-black text-slate-900">Informations du point relais</h2><div className="grid gap-4 md:grid-cols-2"><Field label="Prénom du responsable" value={p.prenomResponsable} onChange={v=>ch('prenomResponsable',v)}/><Field label="Nom du responsable" value={p.nomResponsable} onChange={v=>ch('nomResponsable',v)}/><Field label="Téléphone" value={p.telephone} onChange={v=>ch('telephone',v)}/><Field label="Nom du point relais" value={p.nom} onChange={v=>ch('nom',v)}/><SelectField label="Type de structure" value={p.typeStructure} onChange={v=>ch('typeStructure',v)}><option value="">Sélectionner</option><option value="COMMERCE">Commerce</option><option value="TABAC">Bureau de tabac</option><option value="SUPERMARCHE">Supérette / Supermarché</option><option value="LIBRAIRIE">Librairie</option><option value="AUTRE">Autre</option></SelectField><Field label="Adresse" value={p.adresse} onChange={v=>ch('adresse',v)}/><GeoFields p={p} changeVille={changeVille} changeDepartement={changeDepartement}/><Field label="Code postal" value={p.codePostal} onChange={v=>ch('codePostal',v)}/><Field label="Pays" value={p.pays} readOnly/><Field label="Capacité maximale de colis" type="number" min="1" value={p.capacite} onChange={v=>ch('capacite',v)}/><SelectField label="Statut opérationnel" value={p.statutOperationnel} onChange={v=>ch('statutOperationnel',v)}><option value="ouvert">Ouvert</option><option value="vacances">Vacances</option><option value="travaux">Travaux</option><option value="fermeture_exceptionnelle">Fermeture exceptionnelle</option><option value="autre">Autre</option></SelectField><TextArea label="Horaires d'ouverture" required value={p.horaires} onChange={v=>ch('horaires',v)}/><div className="md:col-span-2"><span className="mb-2 block text-xs font-bold text-slate-600">Services proposés</span><div className="flex flex-wrap gap-5">{[['reception','Réception'],['withdrawal','Retrait'],['returnPackage','Retour colis']].map(([k,l])=><label key={k} className="flex items-center gap-2 text-sm"><input type="checkbox" checked={Boolean(p.services?.[k])} onChange={e=>service(k,e.target.checked)}/>{l}</label>)}</div></div><TextArea label="Description" value={p.description} onChange={v=>ch('description',v)}/></div></section> }
 
-export default function ActivationPage() {
-  return (
-    <Suspense fallback={<ActivationFallback />}>
-      <ActivationForm />
-    </Suspense>
-  );
-}
+function ActivationFallback(){return <main className="flex min-h-screen items-center justify-center bg-slate-50"><p className="text-sm font-semibold text-slate-600">Chargement de l’activation…</p></main>}
+export default function ActivationPage(){return <Suspense fallback={<ActivationFallback/>}><ActivationForm/></Suspense>}

@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { ArrowLeft, MapPin, Package, Weight, Printer } from "lucide-react";
+import { ArrowLeft, Download, MapPin, Package, Weight, Printer } from "lucide-react";
 import PageTitle from "@/composants/ui/PageTitle";
 import Section from "@/composants/ui/Section";
 import Loading from "@/composants/ui/Loading";
 import Alert from "@/composants/ui/Alert";
 import serviceLivraison from "@/services/ServiceLivraison.js";
+import {downloadDeliveryPdf} from "@/utils/pdfDelivery.js";
 
 function formatDate(value) {
     if (!value) return "—";
@@ -74,7 +75,7 @@ export default function LivraisonDetailPage() {
                 <Link href="/commercant/livraisons" className="mb-4 inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-blue-700">
                     <ArrowLeft size={16} /> Mes livraisons
                 </Link>
-                <PageTitle title={`Livraison ${delivery.reference}`} description="Consultez les informations, l’historique et déclenchez les actions disponibles." actions={<div className="flex flex-wrap gap-2"><Link href={`/commercant/livraisons/${delivery.id}/etiquette`} className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-bold text-slate-700 hover:border-slate-300"><Printer size={16}/> Étiquette</Link></div>} />
+                <PageTitle title={`Livraison ${delivery.reference}`} description="Consultez les informations, l’historique et déclenchez les actions disponibles." actions={<div className="flex flex-wrap gap-2"><Link href={`/commercant/livraisons/${delivery.id}/etiquette`} className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-bold text-slate-700 hover:border-slate-300"><Printer size={16}/> Étiquette</Link>{delivery.receivedAt&&<button onClick={()=>downloadDeliveryPdf(delivery,"receipt",{comment:delivery.receptionComment||delivery.refusalReason})} className="inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-white px-4 py-2.5 text-sm font-bold text-blue-700"><Download size={16}/> Réception PDF</button>}{delivery.status==="Retiré"&&<button onClick={()=>downloadDeliveryPdf(delivery,"handoff",{proof:delivery.handoffProof})} className="inline-flex items-center gap-2 rounded-xl border border-indigo-200 bg-white px-4 py-2.5 text-sm font-bold text-indigo-700"><Download size={16}/> Remise PDF</button>}</div>} />
             </div>
 
             {actionMessage && <Alert type="success" message={actionMessage}/>}

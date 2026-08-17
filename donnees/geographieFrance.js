@@ -17,3 +17,12 @@ export function departementPourVille(ville) {
   const match = VILLES_PRINCIPALES.find((v) => v.nom.toLocaleLowerCase('fr-FR') === normalized);
   return match ? departementParCode(match.departementCode) : null;
 }
+
+export const REGIONS_FRANCE = [
+  'Auvergne-Rhône-Alpes','Bourgogne-Franche-Comté','Bretagne','Centre-Val de Loire','Corse','Grand Est','Hauts-de-France','Île-de-France','Normandie','Nouvelle-Aquitaine','Occitanie','Pays de la Loire',"Provence-Alpes-Côte d'Azur",'Guadeloupe','Martinique','Guyane','La Réunion','Mayotte',
+];
+
+export function codePourDepartement(nom) {
+  const normalized = String(nom || '').trim().toLocaleLowerCase('fr-FR');
+  return DEPARTEMENTS_FRANCE.find((d) => d.nom.toLocaleLowerCase('fr-FR') === normalized)?.code || '';
+}

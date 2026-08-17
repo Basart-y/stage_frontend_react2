@@ -1,13 +1,15 @@
 "use client";
 
 import {useEffect, useMemo, useState} from "react";
-import {BadgeCheck, CheckCircle2, PackageCheck, Search} from "lucide-react";
+import {BadgeCheck, CheckCircle2, Download, PackageCheck, QrCode, Search} from "lucide-react";
 import PageTitle from "@/composants/ui/PageTitle";
 import Section from "@/composants/ui/Section";
 import Input from "@/composants/ui/Input";
 import Select from "@/composants/ui/Select";
 import Alert from "@/composants/ui/Alert";
+import QrScanner from "@/composants/ui/QrScanner";
 import serviceLivraison from "@/services/ServiceLivraison.js";
+import {downloadDeliveryPdf} from "@/utils/pdfDelivery.js";
 
 function formatDate(value) {
     if (!value) return "—";
@@ -54,6 +56,7 @@ export default function RemiseColisPage() {
     const [lastHandoff, setLastHandoff] = useState(null);
     const [proof, setProof] = useState({recipientName: "", identification: "piece_identite", proofReference: ""});
     const [message, setMessage] = useState(null);
+    const [mode, setMode] = useState("manual");
 
     async function refresh(){ setDeliveries(await serviceLivraison.getAll()); }
     useEffect(() => { refresh(); }, []);
@@ -78,14 +81,36 @@ export default function RemiseColisPage() {
                 <CheckCircle2 className="mt-0.5 shrink-0" size={20}/><div><p className="font-extrabold">Colis remis avec succès</p><p className="mt-1 text-sm">La remise et son mode d'identification ont été enregistrés dans l'historique.</p></div>
             </div>
             <HandoffSheet delivery={lastHandoff.delivery} proof={lastHandoff.proof} completed/>
+            <button onClick={()=>downloadDeliveryPdf(lastHandoff.delivery, "handoff", {proof:lastHandoff.proof})} className="mt-4 inline-flex items-center gap-2 rounded-xl border border-indigo-200 bg-white px-4 py-2.5 text-sm font-bold text-indigo-700 hover:bg-indigo-50"><Download size={16}/> Télécharger la fiche PDF</button>
         </Section>}
 
-        <Section title="Rechercher un colis"><div className="relative"><Search size={17} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600"/><input value={query} onChange={(e)=>setQuery(e.target.value)} placeholder="Référence, nom ou prénom du client" className="w-full rounded-xl border border-slate-200 bg-white/70 py-3 pl-10 pr-4 text-sm text-slate-900 outline-none focus:border-blue-500"/></div></Section>
+        <Section title="Identifier le colis">
+            <div className="mb-4 flex flex-wrap gap-3">
+                <button onClick={()=>setMode("manual")} className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold ${mode === "manual" ? "bg-indigo-600 text-white" : "border border-slate-200 bg-white text-slate-700"}`}><Search size={16}/> Recherche</button>
+                <button onClick={()=>setMode("qr")} className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold ${mode === "qr" ? "bg-indigo-600 text-white" : "border border-slate-200 bg-white text-slate-700"}`}><QrCode size={16}/> Scanner QR</button>
+            </div>
+            {mode === "qr" && <div className="mb-5"><QrScanner active={mode === "qr"} onScan={(value)=>{
+                const reference = value.trim();
+                const delivery = deliveries.find((item)=>item.reference?.toLowerCase() === reference.toLowerCase() && item.status === "Arrivé au point relais");
+                setQuery(reference);
+                setLastHandoff(null);
+                if (delivery) {
+                    setSelected(delivery);
+                    setProof({recipientName:`${delivery.client?.firstName || ""} ${delivery.client?.lastName || ""}`.trim(), identification:"qr_code", proofReference:`QR-${delivery.reference}`});
+                    setMessage({type:"success", message:`QR reconnu : ${delivery.reference}. Vérifiez l'identité de la personne avant de confirmer la remise.`});
+                } else {
+                    setSelected(null);
+                    setMessage({type:"error", message:`QR reconnu (${reference}), mais ce colis n'est pas disponible pour une remise.`});
+                }
+            }}/></div>}
+            <div className="relative"><Search size={17} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600"/><input value={query} onChange={(e)=>setQuery(e.target.value)} placeholder="Référence, nom ou prénom du client" className="w-full rounded-xl border border-slate-200 bg-white/70 py-3 pl-10 pr-4 text-sm text-slate-900 outline-none focus:border-blue-500"/></div>
+        </Section>
         <Section title={`Colis disponibles (${available.length})`}>
             <div className="grid gap-3 md:grid-cols-2">{available.length === 0 ? <p className="text-sm text-slate-600">Aucun colis disponible.</p> : available.map((delivery)=><button key={delivery.id} onClick={()=>{setSelected(delivery); setLastHandoff(null); setProof((p)=>({...p, recipientName:`${delivery.client?.firstName || ""} ${delivery.client?.lastName || ""}`.trim()}));}} className={`rounded-2xl border p-4 text-left transition ${selected?.id===delivery.id?"border-indigo-500 bg-indigo-500/10":"border-slate-200 bg-slate-50 hover:border-slate-300"}`}><div className="flex items-start justify-between gap-3"><div><p className="font-black text-slate-900">{delivery.reference}</p><p className="mt-1 text-sm text-slate-700">{delivery.client?.firstName} {delivery.client?.lastName}</p></div><PackageCheck size={19} className="text-indigo-700"/></div><p className="mt-3 text-xs text-slate-600">Disponible depuis {delivery.receivedAt ? new Date(delivery.receivedAt).toLocaleDateString("fr-FR") : "aujourd’hui"}</p></button>)}</div>
         </Section>
         {selected && <Section title="Fiche et preuve de remise" description="Vérifiez les informations du colis avant de confirmer sa sortie du stock.">
             <HandoffSheet delivery={selected} proof={proof}/>
+            <button onClick={()=>downloadDeliveryPdf(selected, "handoff", {proof})} className="mt-4 inline-flex items-center gap-2 rounded-xl border border-indigo-200 bg-white px-4 py-2.5 text-sm font-bold text-indigo-700 hover:bg-indigo-50"><Download size={16}/> Télécharger la fiche PDF</button>
             <div className="mt-5 grid gap-5 md:grid-cols-2"><Input label="Nom de la personne" name="recipientName" value={proof.recipientName} onChange={(e)=>setProof({...proof,recipientName:e.target.value})}/><Select label="Mode d'identification" name="identification" value={proof.identification} onChange={(e)=>setProof({...proof,identification:e.target.value})}><option value="piece_identite">Pièce d'identité</option><option value="qr_code">QR Code</option><option value="numero_suivi">Numéro de suivi</option></Select><Input label="Référence de preuve (optionnelle)" name="proofReference" value={proof.proofReference} onChange={(e)=>setProof({...proof,proofReference:e.target.value})} placeholder="Ex. QR vérifié"/></div><button onClick={handoff} className="mt-5 inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-bold text-white hover:bg-indigo-500"><BadgeCheck size={17}/> Confirmer la remise</button>
         </Section>}
     </div>;

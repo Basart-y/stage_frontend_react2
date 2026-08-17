@@ -18,23 +18,21 @@ export default function TechnicalTraceabilityPage() {
   }, []);
 
   const filtered = useMemo(() => items.filter(item =>
-    `${item.requestId} ${item.resourceId} ${item.actorId || ''} ${item.actorRole || ''} ${item.action || ''}`
+    `${item.resourceId} ${item.actorId || ''} ${item.actorRole || ''} ${item.action || ''}`
       .toLowerCase().includes(query.toLowerCase())
   ), [items, query]);
 
   return <div className="space-y-8">
-    <PageTitle title="Traçabilité technique" description="Journal interne des opérations sensibles réalisées sur les colis : requête, acteur, action, ressource, état avant/après et contexte technique."/>
+    <PageTitle title="Traçabilité technique" description="Historique des opérations réalisées sur les colis : date, acteur, action et changement d’état."/>
     <Section title="Recherche dans le journal">
-      <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Request ID, colis, acteur, action..." className="w-full max-w-xl rounded-xl border border-slate-200 bg-white/70 px-4 py-3 text-sm text-slate-950 outline-none focus:border-blue-500"/>
+      <input value={query} onChange={e => setQuery(e.target.value)} placeholder="Colis, acteur, rôle ou action..." className="w-full max-w-xl rounded-xl border border-slate-200 bg-white/70 px-4 py-3 text-sm text-slate-950 outline-none focus:border-blue-500"/>
     </Section>
     <TableauDonnees loading={loading} columns={[
       { key: 'occurredAt', label: 'Date', render: row => new Date(row.occurredAt).toLocaleString('fr-FR') },
-      { key: 'requestId', label: 'Request ID', render: row => <span className="font-mono text-xs">{row.requestId}</span> },
       { key: 'action', label: 'Action' },
       { key: 'resourceId', label: 'Colis', render: row => <span className="font-mono text-xs">{row.resourceId}</span> },
       { key: 'actorRole', label: 'Rôle' },
       { key: 'transition', label: 'Transition', render: row => `${row.before?.status || '—'} → ${row.after?.status || '—'}` },
-      { key: 'technical', label: 'Contexte', render: row => <span className="text-xs text-slate-600">{row.technical?.method || '—'} {row.technical?.path || ''}</span> },
-    ]} data={filtered} emptyMessage="Aucune trace technique enregistrée."/>
+    ]} data={filtered} emptyMessage="Aucune trace enregistrée."/>
   </div>;
 }

@@ -12,6 +12,8 @@ import Alert from "@/composants/ui/Alert";
 import {serviceRegistrationRequests} from "@/services/ServiceRegistrationRequests.js";
 
 
+import {DEPARTEMENTS_FRANCE,departementParCode,departementPourVille,codePourDepartement} from "@/donnees/geographieFrance.js";
+
 export default function InscriptionPointRelaisPage() {
 
 
@@ -258,16 +260,14 @@ export default function InscriptionPointRelaisPage() {
                             <Input
                                 label="Ville"
                                 value={form.city}
-                                onChange={(e) => handleChange("city", e.target.value)}
+                                onChange={(e) => {const city=e.target.value;handleChange("city", city);const dep=departementPourVille(city);if(dep)handleChange("department",dep.nom)}}
                             />
 
 
-                            <Input
-                                label="Département"
-                                value={form.department}
-                                onChange={(e) => handleChange("department", e.target.value)}
-                                required
-                            />
+                            <Select label="Département" value={codePourDepartement(form.department)} onChange={(e)=>handleChange("department",departementParCode(e.target.value)?.nom||"")} required>
+                                <option value="">Sélectionner</option>
+                                {DEPARTEMENTS_FRANCE.map(d=><option key={d.code} value={d.code}>{d.code} - {d.nom}</option>)}
+                            </Select>
 
                             <Input
                                 label="Code postal"

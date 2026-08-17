@@ -11,6 +11,7 @@ import Section from "@/composants/ui/Section";
 import Alert from "@/composants/ui/Alert";
 import ActionButton from "@/composants/ui/ActionButton";
 import {serviceRegistrationRequests} from "@/services/ServiceRegistrationRequests.js";
+import {DEPARTEMENTS_FRANCE,departementParCode,departementPourVille,codePourDepartement} from "@/donnees/geographieFrance.js";
 
 export default function InscriptionCommercantPage() {
     const [form, setForm] = useState({
@@ -77,8 +78,8 @@ export default function InscriptionCommercantPage() {
                         </Select>
                         <Input label="Téléphone" placeholder="06..." value={form.phone} onChange={(e) => handleChange("phone", e.target.value)}/>
                         <Input label="Adresse" value={form.address} onChange={(e) => handleChange("address", e.target.value)} required/>
-                        <Input label="Ville" value={form.city} onChange={(e) => handleChange("city", e.target.value)} required/>
-                        <Input label="Département" placeholder="Ex. Hérault" value={form.department} onChange={(e) => handleChange("department", e.target.value)} required/>
+                        <Input label="Ville" value={form.city} onChange={(e) => {const city=e.target.value;handleChange("city",city);const dep=departementPourVille(city);if(dep)handleChange("department",dep.nom)}} required/>
+                        <Select label="Département" value={codePourDepartement(form.department)} onChange={(e)=>handleChange("department",departementParCode(e.target.value)?.nom||"")} required><option value="">Sélectionner</option>{DEPARTEMENTS_FRANCE.map(d=><option key={d.code} value={d.code}>{d.code} - {d.nom}</option>)}</Select>
                         <Input label="Code postal" value={form.postalCode} onChange={(e) => handleChange("postalCode", e.target.value)} required/>
                         <Input label="Pays" value={form.country} onChange={(e) => handleChange("country", e.target.value)}/>
                         <Input label="Site web" placeholder="https://..." value={form.website} onChange={(e) => handleChange("website", e.target.value)}/>

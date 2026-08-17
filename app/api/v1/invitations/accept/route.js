@@ -3,7 +3,7 @@ import { acceptInvitation } from '@/lib/backend/accountDomain.js';
 export async function POST(request) {
   try { return ok(await acceptInvitation(await request.json())); }
   catch (e) {
-    const map = { INVITATION_NOT_FOUND: [404,'Invitation introuvable.'], INVITATION_EXPIRED:[410,'Invitation expirée.'], INVALID_INVITATION_TOKEN:[400,'Lien d’invitation invalide.'], WEAK_PASSWORD:[400,'Le mot de passe doit contenir au moins 8 caractères.'], PASSWORD_TOO_LONG:[400,'Le mot de passe dépasse la limite de 72 octets acceptée par bcrypt.'] };
+    const map = { INVITATION_NOT_FOUND: [404,'Invitation introuvable.'], INVITATION_EXPIRED:[410,'Invitation expirée.'], INVALID_INVITATION_TOKEN:[400,'Lien d’invitation invalide.'], WEAK_PASSWORD:[400,'Le mot de passe doit contenir au moins 8 caractères.'], PASSWORD_TOO_LONG:[400,'Le mot de passe dépasse la limite de 72 octets acceptée par bcrypt.'], PROFILE_INCOMPLETE:[400,'Veuillez renseigner tous les champs obligatoires du profil.'], INVITATION_SCOPE_MISMATCH:[400,'La ville ou le département doit correspondre à ceux définis dans l’invitation.'] };
     if (map[e.message]) return apiError(map[e.message][0], e.message, map[e.message][1]);
     return apiError(500, 'INTERNAL_ERROR', 'Activation du compte impossible.');
   }

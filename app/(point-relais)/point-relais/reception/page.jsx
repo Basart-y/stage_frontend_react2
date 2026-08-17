@@ -1,13 +1,15 @@
 "use client";
 
 import {useEffect, useMemo, useState} from "react";
-import {CheckCircle2, QrCode, Search, XCircle} from "lucide-react";
+import {CheckCircle2, Download, QrCode, Search, XCircle} from "lucide-react";
 import PageTitle from "@/composants/ui/PageTitle";
 import Section from "@/composants/ui/Section";
 import Input from "@/composants/ui/Input";
 import Textarea from "@/composants/ui/Textarea";
 import Alert from "@/composants/ui/Alert";
+import QrScanner from "@/composants/ui/QrScanner";
 import serviceLivraison from "@/services/ServiceLivraison.js";
+import {downloadDeliveryPdf} from "@/utils/pdfDelivery.js";
 
 function formatDate(value) {
     if (!value) return "—";
@@ -93,6 +95,7 @@ export default function ReceptionPage() {
                 <div><p className="font-extrabold">{lastProcessed.action === "accepted" ? "Colis accepté et ajouté au stock" : "Réception refusée"}</p><p className="mt-1 text-sm">Observation : {lastProcessed.delivery.receptionComment}</p></div>
             </div>
             <DeliverySheet delivery={lastProcessed.delivery} title="Fiche après traitement"/>
+            <button onClick={()=>downloadDeliveryPdf(lastProcessed.delivery, "receipt", {comment:lastProcessed.delivery.receptionComment})} className="mt-4 inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-white px-4 py-2.5 text-sm font-bold text-blue-700 hover:bg-blue-50"><Download size={16}/> Télécharger la fiche PDF</button>
         </Section>}
 
         <Section title="Mode d'identification">
@@ -100,7 +103,19 @@ export default function ReceptionPage() {
                 <button onClick={() => setMode("manual")} className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold ${mode === "manual" ? "bg-blue-600 text-white" : "border border-slate-200 bg-white text-slate-700"}`}><Search size={16}/> Recherche</button>
                 <button onClick={() => setMode("qr")} className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold ${mode === "qr" ? "bg-blue-600 text-white" : "border border-slate-200 bg-white text-slate-700"}`}><QrCode size={16}/> QR Code</button>
             </div>
-            {mode === "qr" && <div className="mt-5 flex min-h-56 items-center justify-center rounded-2xl border border-dashed border-blue-500/50 bg-blue-500/5 p-8 text-center"><div><QrCode size={46} className="mx-auto text-blue-700"/><p className="mt-3 font-bold text-slate-900">Scanner le QR code</p><p className="mt-1 text-sm text-slate-600">Pour la démo, saisissez ensuite la référence ci-dessous.</p></div></div>}
+            {mode === "qr" && <div className="mt-5"><QrScanner active={mode === "qr"} onScan={(value) => {
+                const reference = value.trim();
+                const delivery = deliveries.find((item) => item.reference?.toLowerCase() === reference.toLowerCase() && ["Créée", "En transit"].includes(item.status));
+                setQuery(reference);
+                setLastProcessed(null);
+                if (delivery) {
+                    setSelected(delivery);
+                    setMessage({type: "success", message: `QR reconnu : ${delivery.reference}. Vérifiez la fiche avant de confirmer la réception.`});
+                } else {
+                    setSelected(null);
+                    setMessage({type: "error", message: `QR reconnu (${reference}), mais aucune livraison attendue ne correspond à cette référence.`});
+                }
+            }}/></div>}
             <div className="mt-5"><Input label="Référence ou nom du client" name="search" value={query} onChange={(e) => setQuery(e.target.value)} placeholder="LIV-00001 ou Dupont"/></div>
         </Section>
 
@@ -112,6 +127,7 @@ export default function ReceptionPage() {
 
         {selected && <Section title="Fiche et décision de réception" description="Vérifiez toutes les informations avant de confirmer l'entrée en stock ou le refus.">
             <DeliverySheet delivery={selected}/>
+            <button onClick={()=>downloadDeliveryPdf(selected, "receipt", {comment})} className="mt-4 inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-white px-4 py-2.5 text-sm font-bold text-blue-700 hover:bg-blue-50"><Download size={16}/> Télécharger la fiche PDF</button>
             <div className="mt-5"><Textarea label="Observation / motif de refus" name="comment" value={comment} onChange={(e) => setComment(e.target.value)} placeholder="Colis reçu sans anomalie, emballage endommagé..."/></div>
             <div className="mt-5 flex flex-wrap gap-3"><button onClick={accept} className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-3 text-sm font-bold text-white hover:bg-indigo-500"><CheckCircle2 size={17}/> Accepter et stocker</button><button onClick={refuse} className="inline-flex items-center gap-2 rounded-xl border border-rose-500/30 bg-rose-500/10 px-5 py-3 text-sm font-bold text-rose-700 hover:bg-rose-500/15"><XCircle size={17}/> Refuser</button></div>
         </Section>}

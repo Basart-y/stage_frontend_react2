@@ -6,6 +6,7 @@ import Alert from "@/composants/ui/Alert";
 import Loading from "@/composants/ui/Loading";
 import TableauDonnees from "@/composants/table/TableauDonnees.jsx";
 import {serviceSuperManager} from "@/services/ServiceSuperManager.js";
+import {DEPARTEMENTS_FRANCE,REGIONS_FRANCE,VILLES_PRINCIPALES,departementParCode,departementPourVille,codePourDepartement} from "@/donnees/geographieFrance.js";
 
 const statusLabel = {invite: "Invitation envoyée", actif: "Actif", suspendu: "Suspendu"};
 
@@ -15,7 +16,7 @@ export default function ManagersPage() {
     const [busy, setBusy] = useState(false);
     const [feedback, setFeedback] = useState(null);
     const [activationUrl, setActivationUrl] = useState("");
-    const [form, setForm] = useState({firstName:"", lastName:"", email:"", phone:"", city:"", departement:"", scopeLevel:"departement", scopeValue:""});
+    const [form, setForm] = useState({firstName:"", lastName:"", email:"", phone:"", city:"", departement:"", departmentCode:"", scopeLevel:"departement", scopeValue:""});
     const [loading, setLoading] = useState(true);
 
     async function load(){
@@ -38,7 +39,7 @@ export default function ManagersPage() {
             const result = await serviceSuperManager.createManager({...form, scopeValue: form.scopeLevel === 'pays' ? '' : form.scopeValue});
             setActivationUrl(result.activationUrl || '');
             setFeedback({type:"success", message:"Gestionnaire invité avec son périmètre. Il devra définir son mot de passe avant de se connecter."});
-            setForm({firstName:"", lastName:"", email:"", phone:"", city:"", departement:"", scopeLevel:"departement", scopeValue:""});
+            setForm({firstName:"", lastName:"", email:"", phone:"", city:"", departement:"", departmentCode:"", scopeLevel:"departement", scopeValue:""});
             await load();
         } catch(error){ setFeedback({type:"error", message:error.message || "Impossible de créer le gestionnaire."}); }
         finally {setBusy(false);}
@@ -64,9 +65,9 @@ export default function ManagersPage() {
             <div className="md:col-span-2"><h2 className="text-lg font-bold text-slate-950">Nouveau Gestionnaire</h2><p className="mt-1 text-sm text-slate-600">Le périmètre est appliqué par le serveur à toutes ses listes administratives.</p></div>
             <Field label="Prénom" value={form.firstName} onChange={v=>setForm({...form,firstName:v})}/><Field label="Nom" value={form.lastName} onChange={v=>setForm({...form,lastName:v})}/>
             <Field label="Email" type="email" required value={form.email} onChange={v=>setForm({...form,email:v})}/><Field label="Téléphone" value={form.phone} onChange={v=>setForm({...form,phone:v})}/>
-            <Field label="Ville" value={form.city} onChange={v=>setForm({...form,city:v})}/><Field label="Département" value={form.departement} onChange={v=>setForm({...form,departement:v})}/>
+            <label className="space-y-2 text-sm font-medium text-slate-700"><span>Ville</span><input list="manager-villes-france" value={form.city} onChange={e=>{const city=e.target.value;const dep=departementPourVille(city);setForm({...form,city,...(dep?{departement:dep.nom,departmentCode:dep.code}:{})})}} className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5"/><datalist id="manager-villes-france">{VILLES_PRINCIPALES.map(v=><option key={`${v.nom}-${v.departementCode}`} value={v.nom} label={`${v.departementCode} - ${departementParCode(v.departementCode)?.nom||''}`}/>)}</datalist></label><label className="space-y-2 text-sm font-medium text-slate-700"><span>Département</span><select value={form.departmentCode||codePourDepartement(form.departement)} onChange={e=>{const dep=departementParCode(e.target.value);setForm({...form,departmentCode:e.target.value,departement:dep?.nom||''})}} className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5"><option value="">Sélectionner</option>{DEPARTEMENTS_FRANCE.map(d=><option key={d.code} value={d.code}>{d.code} - {d.nom}</option>)}</select></label>
             <label className="space-y-2 text-sm font-medium text-slate-700"><span>Niveau du périmètre</span><select value={form.scopeLevel} onChange={e=>setForm({...form,scopeLevel:e.target.value,scopeValue:""})} className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5"><option value="ville">Ville</option><option value="departement">Département</option><option value="region">Région</option><option value="pays">Pays</option></select></label>
-            {form.scopeLevel!=='pays'&&<Field label={form.scopeLevel==='ville'?"Ville du périmètre":form.scopeLevel==='region'?"Région du périmètre":"Département du périmètre"} required value={form.scopeValue} onChange={v=>setForm({...form,scopeValue:v})}/>} 
+            {form.scopeLevel==='ville'&&<label className="space-y-2 text-sm font-medium text-slate-700"><span>Ville du périmètre</span><input required list="manager-villes-france" value={form.scopeValue} onChange={e=>setForm({...form,scopeValue:e.target.value})} className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5"/></label>}{form.scopeLevel==='departement'&&<label className="space-y-2 text-sm font-medium text-slate-700"><span>Département du périmètre</span><select required value={codePourDepartement(form.scopeValue)} onChange={e=>setForm({...form,scopeValue:departementParCode(e.target.value)?.nom||''})} className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5"><option value="">Sélectionner</option>{DEPARTEMENTS_FRANCE.map(d=><option key={d.code} value={d.code}>{d.code} - {d.nom}</option>)}</select></label>}{form.scopeLevel==='region'&&<label className="space-y-2 text-sm font-medium text-slate-700"><span>Région du périmètre</span><select required value={form.scopeValue} onChange={e=>setForm({...form,scopeValue:e.target.value})} className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2.5"><option value="">Sélectionner</option>{REGIONS_FRANCE.map(r=><option key={r} value={r}>{r}</option>)}</select></label>} 
             <div className="md:col-span-2"><button disabled={busy} className="rounded-xl bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-50">{busy?"Création…":"Créer l’invitation"}</button></div>
             {activationUrl&&<div className="md:col-span-2 rounded-xl border border-amber-700/50 bg-amber-500/10 p-4"><p className="text-sm font-semibold text-amber-900">Lien d’activation temporaire</p><p className="mt-2 break-all text-xs text-slate-700">{activationUrl}</p><button type="button" onClick={()=>navigator.clipboard.writeText(activationUrl)} className="mt-3 text-sm font-semibold text-blue-700 underline">Copier le lien</button></div>}
         </form>}
