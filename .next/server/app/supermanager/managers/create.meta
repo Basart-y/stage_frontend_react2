@@ -1,0 +1,18 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(supermanager)/layout,_N_T_/(supermanager)/supermanager/layout,_N_T_/(supermanager)/supermanager/managers/layout,_N_T_/(supermanager)/supermanager/managers/create/layout,_N_T_/(supermanager)/supermanager/managers/create/page,_N_T_/supermanager/managers/create"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/!KHN1cGVybWFuYWdlcik/supermanager/managers/create/__PAGE__",
+    "/!KHN1cGVybWFuYWdlcik/supermanager/managers/create",
+    "/!KHN1cGVybWFuYWdlcik/supermanager/managers",
+    "/!KHN1cGVybWFuYWdlcik/supermanager",
+    "/!KHN1cGVybWFuYWdlcik",
+    "/_index",
+    "/_head"
+  ]
+}

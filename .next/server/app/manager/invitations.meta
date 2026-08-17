@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(manager)/layout,_N_T_/(manager)/manager/layout,_N_T_/(manager)/manager/invitations/layout,_N_T_/(manager)/manager/invitations/page,_N_T_/manager/invitations"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/!KG1hbmFnZXIp/manager/invitations/__PAGE__",
+    "/!KG1hbmFnZXIp/manager/invitations",
+    "/!KG1hbmFnZXIp/manager",
+    "/!KG1hbmFnZXIp",
+    "/_index",
+    "/_head"
+  ]
+}

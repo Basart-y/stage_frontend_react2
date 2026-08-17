@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(point-relais)/layout,_N_T_/(point-relais)/point-relais/layout,_N_T_/(point-relais)/point-relais/finance/layout,_N_T_/(point-relais)/point-relais/finance/page,_N_T_/point-relais/finance"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/!KHBvaW50LXJlbGFpcyk/point-relais/finance/__PAGE__",
+    "/!KHBvaW50LXJlbGFpcyk/point-relais/finance",
+    "/!KHBvaW50LXJlbGFpcyk/point-relais",
+    "/!KHBvaW50LXJlbGFpcyk",
+    "/_index",
+    "/_head"
+  ]
+}

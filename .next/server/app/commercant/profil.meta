@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(commercant)/layout,_N_T_/(commercant)/commercant/layout,_N_T_/(commercant)/commercant/profil/layout,_N_T_/(commercant)/commercant/profil/page,_N_T_/commercant/profil"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/!KGNvbW1lcmNhbnQp/commercant/profil/__PAGE__",
+    "/!KGNvbW1lcmNhbnQp/commercant/profil",
+    "/!KGNvbW1lcmNhbnQp/commercant",
+    "/!KGNvbW1lcmNhbnQp",
+    "/_index",
+    "/_head"
+  ]
+}

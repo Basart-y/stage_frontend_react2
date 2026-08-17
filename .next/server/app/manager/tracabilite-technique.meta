@@ -1,0 +1,17 @@
+{
+  "headers": {
+    "x-nextjs-stale-time": "300",
+    "x-nextjs-prerender": "1",
+    "x-next-cache-tags": "_N_T_/layout,_N_T_/(manager)/layout,_N_T_/(manager)/manager/layout,_N_T_/(manager)/manager/tracabilite-technique/layout,_N_T_/(manager)/manager/tracabilite-technique/page,_N_T_/manager/tracabilite-technique"
+  },
+  "segmentPaths": [
+    "/_tree",
+    "/_full",
+    "/!KG1hbmFnZXIp/manager/tracabilite-technique/__PAGE__",
+    "/!KG1hbmFnZXIp/manager/tracabilite-technique",
+    "/!KG1hbmFnZXIp/manager",
+    "/!KG1hbmFnZXIp",
+    "/_index",
+    "/_head"
+  ]
+}
