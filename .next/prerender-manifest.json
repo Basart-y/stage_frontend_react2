@@ -1226,6 +1226,30 @@
         "x-next-revalidate-tag-token"
       ]
     },
+    "/supermanager/finance-managers": {
+      "experimentalBypassFor": [
+        {
+          "type": "header",
+          "key": "next-action"
+        },
+        {
+          "type": "header",
+          "key": "content-type",
+          "value": "multipart/form-data;.*"
+        }
+      ],
+      "initialRevalidateSeconds": false,
+      "srcRoute": "/supermanager/finance-managers",
+      "dataRoute": "/supermanager/finance-managers.rsc",
+      "allowHeader": [
+        "host",
+        "x-matched-path",
+        "x-prerender-revalidate",
+        "x-prerender-revalidate-if-generated",
+        "x-next-revalidated-tags",
+        "x-next-revalidate-tag-token"
+      ]
+    },
     "/supermanager/managers": {
       "experimentalBypassFor": [
         {
@@ -1422,8 +1446,8 @@
   "dynamicRoutes": {},
   "notFoundRoutes": [],
   "preview": {
-    "previewModeId": "3cf234309c9009f9fb7e6ba557a09f1f",
-    "previewModeSigningKey": "1b26a0ab2117590c51e8c73b78057e82d1b93e03dedf9efd3a31a1649611bff6",
-    "previewModeEncryptionKey": "02f96e6d55760e8b32f5ed172a43b47e4de6e7019bb9abf8bd16377855a63ebb"
+    "previewModeId": "b1f31baffe745fc6beaa547fb0f828f8",
+    "previewModeSigningKey": "cb4f8f6fa2ea91d365f5b4f8e6710bbd17f33959e366bf33ef3212846a6875b6",
+    "previewModeEncryptionKey": "d4d1611e0233aaba2b7c84fe9ef179926fc5d2e360fafcab4fc005fba889f21d"
   }
 }

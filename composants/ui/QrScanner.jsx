@@ -2,22 +2,21 @@
 
 import {useCallback, useEffect, useRef, useState} from "react";
 import {Camera, CameraOff, QrCode} from "lucide-react";
+import jsQR from "jsqr";
 
 export default function QrScanner({onScan, active = true}) {
     const videoRef = useRef(null);
+    const canvasRef = useRef(null);
     const streamRef = useRef(null);
-    const detectorRef = useRef(null);
-    const timerRef = useRef(null);
+    const frameRef = useRef(null);
     const scanningRef = useRef(false);
     const [status, setStatus] = useState("idle");
     const [error, setError] = useState("");
 
     const stopCamera = useCallback(() => {
-        if (timerRef.current) {
-            clearInterval(timerRef.current);
-            timerRef.current = null;
-        }
         scanningRef.current = false;
+        if (frameRef.current) cancelAnimationFrame(frameRef.current);
+        frameRef.current = null;
         if (streamRef.current) {
             streamRef.current.getTracks().forEach((track) => track.stop());
             streamRef.current = null;
@@ -26,59 +25,63 @@ export default function QrScanner({onScan, active = true}) {
         setStatus("idle");
     }, []);
 
+    const scanFrame = useCallback(() => {
+        if (!scanningRef.current) return;
+        const video = videoRef.current;
+        const canvas = canvasRef.current;
+        if (video && canvas && video.readyState >= 2 && video.videoWidth > 0) {
+            const maxWidth = 960;
+            const scale = Math.min(1, maxWidth / video.videoWidth);
+            canvas.width = Math.max(1, Math.round(video.videoWidth * scale));
+            canvas.height = Math.max(1, Math.round(video.videoHeight * scale));
+            const ctx = canvas.getContext("2d", {willReadFrequently: true});
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const image = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const code = jsQR(image.data, image.width, image.height, {inversionAttempts: "attemptBoth"});
+            const value = code?.data?.trim();
+            if (value) {
+                scanningRef.current = false;
+                if (navigator.vibrate) navigator.vibrate(80);
+                stopCamera();
+                onScan?.(value);
+                return;
+            }
+        }
+        frameRef.current = requestAnimationFrame(scanFrame);
+    }, [onScan, stopCamera]);
+
     const startCamera = useCallback(async () => {
         setError("");
-        if (!("mediaDevices" in navigator) || !navigator.mediaDevices?.getUserMedia) {
-            setError("La caméra n'est pas disponible dans ce navigateur.");
+        if (!navigator.mediaDevices?.getUserMedia) {
+            setError("La caméra n'est pas disponible. Utilisez HTTPS/localhost ou saisissez le numéro de suivi.");
             return;
         }
-        if (!("BarcodeDetector" in window)) {
-            setError("Le scan QR direct n'est pas pris en charge par ce navigateur. Utilisez Chrome récent ou saisissez le numéro de suivi.");
-            return;
-        }
-
         try {
             stopCamera();
             setStatus("starting");
-            const supported = await window.BarcodeDetector.getSupportedFormats?.();
-            if (Array.isArray(supported) && !supported.includes("qr_code")) {
-                setError("Ce navigateur ne prend pas en charge la lecture des QR codes.");
-                setStatus("idle");
-                return;
+            let stream;
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({video: {facingMode: {ideal: "environment"}}, audio: false});
+            } catch (firstError) {
+                if (firstError?.name === "OverconstrainedError") {
+                    stream = await navigator.mediaDevices.getUserMedia({video: true, audio: false});
+                } else throw firstError;
             }
-            detectorRef.current = new window.BarcodeDetector({formats: ["qr_code"]});
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: {facingMode: {ideal: "environment"}},
-                audio: false,
-            });
             streamRef.current = stream;
             if (!videoRef.current) return;
             videoRef.current.srcObject = stream;
             await videoRef.current.play();
             setStatus("scanning");
             scanningRef.current = true;
-
-            timerRef.current = setInterval(async () => {
-                if (!scanningRef.current || !videoRef.current || videoRef.current.readyState < 2) return;
-                try {
-                    const codes = await detectorRef.current.detect(videoRef.current);
-                    const value = codes?.[0]?.rawValue?.trim();
-                    if (!value) return;
-                    scanningRef.current = false;
-                    if (navigator.vibrate) navigator.vibrate(80);
-                    stopCamera();
-                    onScan?.(value);
-                } catch {
-                    // Une frame illisible est normale : on continue le scan.
-                }
-            }, 350);
+            frameRef.current = requestAnimationFrame(scanFrame);
         } catch (e) {
             stopCamera();
-            if (e?.name === "NotAllowedError") setError("Accès à la caméra refusé. Autorisez la caméra dans le navigateur puis réessayez.");
-            else if (e?.name === "NotFoundError") setError("Aucune caméra n'a été détectée sur cet appareil.");
-            else setError("Impossible de démarrer la caméra. Vérifiez les autorisations du navigateur.");
+            if (e?.name === "NotAllowedError") setError("Accès caméra refusé. Cliquez sur le cadenas de Chrome, autorisez Caméra, puis réessayez.");
+            else if (e?.name === "NotFoundError") setError("Aucune caméra n'a été détectée sur ce PC.");
+            else if (e?.name === "NotReadableError") setError("La caméra est déjà utilisée par une autre application. Fermez-la puis réessayez.");
+            else setError("Impossible de démarrer la caméra. Vérifiez les autorisations de Chrome.");
         }
-    }, [onScan, stopCamera]);
+    }, [scanFrame, stopCamera]);
 
     useEffect(() => {
         if (!active) stopCamera();
@@ -86,12 +89,13 @@ export default function QrScanner({onScan, active = true}) {
     }, [active, stopCamera]);
 
     return <div className="overflow-hidden rounded-2xl border border-blue-200 bg-slate-950">
+        <canvas ref={canvasRef} className="hidden"/>
         <div className="relative flex min-h-64 items-center justify-center bg-black">
             <video ref={videoRef} playsInline muted className={`h-72 w-full object-cover ${status === "scanning" ? "block" : "hidden"}`}/>
             {status !== "scanning" && <div className="p-8 text-center text-white">
                 <QrCode size={50} className="mx-auto text-blue-300"/>
                 <p className="mt-3 font-extrabold">Scanner le QR code du colis</p>
-                <p className="mt-1 text-sm text-slate-300">La référence sera reconnue automatiquement.</p>
+                <p className="mt-1 text-sm text-slate-300">Compatible Chrome PC et mobile, sans BarcodeDetector.</p>
             </div>}
             {status === "scanning" && <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
                 <div className="h-44 w-44 rounded-2xl border-2 border-white/90 shadow-[0_0_0_999px_rgba(0,0,0,0.2)]"/>
@@ -105,7 +109,7 @@ export default function QrScanner({onScan, active = true}) {
                     <button type="button" onClick={startCamera} disabled={status === "starting"} className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white disabled:opacity-60"><Camera size={16}/> {status === "starting" ? "Ouverture..." : "Ouvrir la caméra"}</button>
                 }
             </div>
-            <p className="mt-3 text-xs text-slate-500">Le navigateur peut demander l'autorisation d'utiliser la caméra. Sur mobile, la caméra arrière est privilégiée.</p>
+            <p className="mt-3 text-xs text-slate-500">Sur Vercel (HTTPS) ou localhost, autorisez la caméra dans Chrome. La saisie manuelle du numéro de suivi reste disponible.</p>
         </div>
     </div>;
 }

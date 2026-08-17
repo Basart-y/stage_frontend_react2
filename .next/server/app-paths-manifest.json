@@ -41,6 +41,7 @@
   "/(supermanager)/supermanager/commerces/[id]/page": "app/(supermanager)/supermanager/commerces/[id]/page.js",
   "/(supermanager)/supermanager/commerces/page": "app/(supermanager)/supermanager/commerces/page.js",
   "/(supermanager)/supermanager/dashboard/page": "app/(supermanager)/supermanager/dashboard/page.js",
+  "/(supermanager)/supermanager/finance-managers/page": "app/(supermanager)/supermanager/finance-managers/page.js",
   "/(supermanager)/supermanager/managers/[id]/page": "app/(supermanager)/supermanager/managers/[id]/page.js",
   "/(supermanager)/supermanager/managers/create/page": "app/(supermanager)/supermanager/managers/create/page.js",
   "/(supermanager)/supermanager/managers/page": "app/(supermanager)/supermanager/managers/page.js",

@@ -41,6 +41,7 @@
   "/(supermanager)/supermanager/commerces/[id]/page": "/supermanager/commerces/[id]",
   "/(supermanager)/supermanager/commerces/page": "/supermanager/commerces",
   "/(supermanager)/supermanager/dashboard/page": "/supermanager/dashboard",
+  "/(supermanager)/supermanager/finance-managers/page": "/supermanager/finance-managers",
   "/(supermanager)/supermanager/managers/[id]/page": "/supermanager/managers/[id]",
   "/(supermanager)/supermanager/managers/create/page": "/supermanager/managers/create",
   "/(supermanager)/supermanager/managers/page": "/supermanager/managers",

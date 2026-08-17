@@ -615,6 +615,12 @@
       "namedRegex": "^/supermanager/dashboard(?:/)?$"
     },
     {
+      "page": "/supermanager/finance-managers",
+      "regex": "^/supermanager/finance\\-managers(?:/)?$",
+      "routeKeys": {},
+      "namedRegex": "^/supermanager/finance\\-managers(?:/)?$"
+    },
+    {
       "page": "/supermanager/managers",
       "regex": "^/supermanager/managers(?:/)?$",
       "routeKeys": {},
