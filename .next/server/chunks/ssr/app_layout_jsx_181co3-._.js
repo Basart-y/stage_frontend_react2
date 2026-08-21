@@ -1,3 +1,0 @@
-module.exports=[98421,a=>{"use strict";var b=a.i(7997);a.s(["default",0,function({children:a}){return(0,b.jsx)("html",{lang:"fr",children:(0,b.jsx)("body",{className:"bg-slate-50 text-slate-900 antialiased",children:a})})},"metadata",0,{title:"",description:"Plateforme B2B de gestion de livraisons et points relais"}])},46122,a=>{a.n(a.i(98421))}];
-
-//# sourceMappingURL=app_layout_jsx_181co3-._.js.map

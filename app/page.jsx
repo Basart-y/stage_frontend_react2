@@ -1,5 +1,5 @@
 import Link from "next/link";
-import {ArrowRight, BadgeCheck, BarChart3, Check, MapPin, Store, Truck} from "lucide-react";
+import {ArrowRight, BarChart3, Check, MapPin, Store} from "lucide-react";
 
 const features = [
     {icon: Store, title: "Expédiez sans friction", description: "Créez, centralisez et suivez vos livraisons depuis un espace métier unique."},
@@ -22,27 +22,16 @@ export default function HomePage() {
         <section className="rf-grid-bg relative overflow-hidden">
             <div className="absolute left-1/2 top-0 h-[520px] w-[700px] -translate-x-1/2 rounded-full bg-blue-600/20 blur-[130px]"/>
             <div className="absolute right-[-120px] top-44 h-80 w-80 rounded-full bg-indigo-400/10 blur-[100px]"/>
-            <div className="relative mx-auto grid max-w-7xl gap-14 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-[1.06fr_.94fr] lg:items-center lg:py-32">
-                <div>
-                    <h1 className="mt-7 max-w-3xl text-5xl font-black leading-[.98] tracking-[-0.055em] sm:text-6xl xl:text-[72px]">Le flux logistique, <span className="bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent">enfin lisible.</span></h1>
-                    <p className="mt-7 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">La plateforme connecte commerçants, points relais et équipes de gestion dans une interface claire pour planifier, suivre et superviser chaque livraison.</p>
-                    <div className="mt-9 flex flex-wrap gap-3">
+            <div className="relative mx-auto max-w-7xl px-5 py-20 sm:px-8 sm:py-28 lg:py-32">
+                <div className="mx-auto max-w-4xl text-center">
+                    <h1 className="mx-auto mt-7 max-w-3xl text-5xl font-black leading-[.98] tracking-[-0.055em] sm:text-6xl xl:text-[72px]">Le flux logistique, <span className="bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent">enfin lisible.</span></h1>
+                    <p className="mx-auto mt-7 max-w-2xl text-base leading-8 text-slate-600 sm:text-lg">La plateforme connecte commerçants, points relais et équipes de gestion dans une interface claire pour planifier, suivre et superviser chaque livraison.</p>
+                    <div className="mt-9 flex flex-wrap justify-center gap-3">
                         <Link href="/inscription/commercant" className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-5 py-3.5 text-sm font-bold text-white shadow-xl shadow-blue-950/30 transition hover:bg-indigo-700/100">Démarrer maintenant <ArrowRight size={17}/></Link>
                     </div>
-                    <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 text-xs font-semibold text-slate-600">{["Validation des acteurs", "Suivi des colis", "Réseau de relais"].map(item => <span key={item} className="flex items-center gap-2"><Check size={14} className="text-indigo-700"/>{item}</span>)}</div>
+                    <div className="mt-10 flex flex-wrap justify-center gap-x-6 gap-y-3 text-xs font-semibold text-slate-600">{["Validation des acteurs", "Suivi des colis", "Réseau de relais"].map(item => <span key={item} className="flex items-center gap-2"><Check size={14} className="text-indigo-700"/>{item}</span>)}</div>
                 </div>
 
-                <div className="relative mx-auto w-full max-w-xl">
-                    <div className="absolute -inset-8 rounded-[3rem] bg-blue-500/10 blur-3xl"/>
-                    <div className="relative overflow-hidden rounded-[28px] border border-white/12 bg-[#0b1b30] p-4 shadow-2xl shadow-black/30 sm:p-5">
-                        <div className="flex items-center justify-between border-b border-white/8 px-1 pb-4"><div><p className="text-xs font-bold uppercase tracking-[0.16em] text-slate-600">Vue opérationnelle</p><p className="mt-1 text-sm font-semibold text-slate-700">Aujourd’hui</p></div><span className="rounded-full bg-indigo-400/10 px-3 py-1.5 text-[11px] font-bold text-indigo-700">● Réseau actif</span></div>
-                        <div className="mt-4 grid grid-cols-3 gap-3">{[["24","Livraisons"],["8","Relais actifs"],["3","À valider"]].map(([v,l]) => <div key={l} className="rounded-2xl border border-white/8 bg-white/[0.045] p-4"><p className="text-2xl font-black tracking-tight">{v}</p><p className="mt-1 text-[10px] font-semibold text-slate-600">{l}</p></div>)}</div>
-                        <div className="mt-3 rounded-2xl border border-white/8 bg-white/[0.035] p-4">
-                            <div className="flex items-center justify-between"><p className="text-xs font-bold text-slate-700">Flux de livraison</p><Truck size={16} className="text-blue-700"/></div>
-                            <div className="mt-5 space-y-4">{[["Création","Commande enregistrée",true],["Acheminement","Vers le point relais",true],["Disponible","En attente du client",false]].map(([t,d,done],i)=><div key={t} className="flex gap-3"><div className="flex flex-col items-center"><span className={`flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-bold ${done ? "bg-blue-600 text-white" : "border border-white/15 bg-white/5 text-slate-600"}`}>{i+1}</span>{i<2&&<span className="mt-1 h-7 w-px bg-white/10"/>}</div><div className="pt-1"><p className="text-xs font-bold text-slate-700">{t}</p><p className="mt-1 text-[11px] text-slate-600">{d}</p></div></div>)}</div>
-                        </div>
-                    </div>
-                </div>
             </div>
         </section>
 

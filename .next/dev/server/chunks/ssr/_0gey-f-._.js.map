@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/yoanb/IdeaProjects/stage_frontend_react2/app/layout.jsx"],"sourcesContent":["import \"./globals.css\";\n\nexport const metadata = {\n    title: \"\",\n    description: \"Plateforme B2B de gestion de livraisons et points relais\",\n};\n\nexport default function RootLayout({children}) {\n    return (<html lang=\"fr\">\n    <body className=\"bg-slate-50 text-slate-900 antialiased\">\n    {children}\n    </body>\n    </html>);\n}\n"],"names":["metadata","title","description","RootLayout","children","lang","className"],"mappings":";;;;;;;;;AAEO,MAAMA,WAAW;IACpBC,OAAO;IACPC,aAAa;AACjB;AAEe,SAASC,WAAW,EAACC,QAAQ,EAAC;IACzC,qBAAQ,8OAAC;QAAKC,MAAK;kBACnB,cAAA,8OAAC;YAAKC,WAAU;sBACfF;;;;;;;;;;;AAGL"}},
+    {"offset": {"line": 42, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/yoanb/IdeaProjects/stage_frontend_react2/node_modules/next/src/server/route-modules/app-page/vendored/rsc/react-jsx-dev-runtime.ts"],"sourcesContent":["module.exports = (\n  require('../../module.compiled') as typeof import('../../module.compiled')\n).vendored['react-rsc']!.ReactJsxDevRuntime\n"],"names":["module","exports","require","vendored","ReactJsxDevRuntime"],"mappings":"AAAAA,OAAOC,OAAO,GACZC,QAAQ,4HACRC,QAAQ,CAAC,YAAY,CAAEC,kBAAkB","ignoreList":[0]}}]
+}

@@ -54,3 +54,11 @@ Les écrans de comptes servent ensuite à consulter, suspendre ou réactiver les
 ## Mise en conformité CR du 30/07
 
 Voir `DOCUMENTATION_TECHNIQUE_CR_30_07.md`, `DOCUMENTATION_FONCTIONNELLE_CR_30_07.md` et exécuter `npm run test:cr`.
+
+## Documentation globale du projet
+
+La documentation consolidée de l'ensemble du projet, incluant l'architecture, les rôles, les API, MongoDB, la configuration, les tests, le déploiement et les comptes de démonstration, est disponible dans :
+
+```text
+DOCUMENTATION_PROJET_COMPLETE.md
+```
